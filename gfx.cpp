@@ -1,0 +1,121 @@
+#include <WadeWork/gfx.h>
+#include <WadeWork/sys_defines.h>
+#include <SFML/Window.hpp>
+
+namespace ww
+{
+	namespace gfx
+	{
+		sf::Window *window = NULL;
+		unsigned int window_width = 640;
+		unsigned int window_height = 480;
+
+		RenderTarget *currentRenderTarget = NULL;
+
+#if PLATFORM_IOS
+		extern void glBindFramebuffer0();
+#endif
+
+
+		bool supportsOpenGL2()
+		{
+			static bool set = false;
+			static bool GL2 = false;
+			if (!set)
+			{
+				set = true;
+#if PLATFORM_PC
+				char* vers = (char*)glGetString(GL_VERSION);
+				if (vers == NULL)
+				{
+					printf("An error occurred when obtaining OpenGL version: Version is null.\n");
+					set = false;
+				}
+				else
+				{
+					GL2 = (!(atof(vers) < 2.0f));
+					printf("OpenGL version is %s\n",vers);
+					if (GL2)
+						printf("GL2!\n");
+					else
+						printf("Not GL2!\n");
+				}
+#else
+				std::string vers = (char*)glGetString(GL_VERSION);
+				GL2 = (vers.find("OpenGL ES 2.0") != std::string::npos);
+
+				NSLog(@"\n\n\n\n\n\n\n\n%s\n\n\n\n\n\n\n\n\n",vers.c_str());
+				UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"OpenGL String"
+																message:[NSString stringWithUTF8String:(const char*)glGetString(GL_VERSION)]
+															   delegate:nil
+													  cancelButtonTitle:@"OK"
+													  otherButtonTitles:nil];
+				[alert show];
+				[alert release];
+#endif
+			}
+		return GL2;
+		}
+
+		void setWindowSize(unsigned int width, unsigned int height)
+		{
+			window_width = width;
+			window_height = height;
+			if (window)
+			{
+				window->setSize(sf::Vector2u(window_width,window_width));
+			}
+		}
+
+		void display()
+		{
+			window->display();
+		}
+
+		void resetRenderTarget()
+		{
+			currentRenderTarget = NULL;
+#if PLATFORM_PC
+			glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
+#elif PLATFORM_IOS
+			glBindFramebuffer0();
+#endif
+		}
+		void setRenderTarget(RenderTarget *target)
+		{
+			currentRenderTarget = target;
+			if (currentRenderTarget == NULL)
+				resetRenderTarget();
+			else
+				currentRenderTarget->bind();
+		}
+		RenderTarget *getRenderTarget()
+		{
+			return currentRenderTarget;
+		}
+
+		void setBlendMode(unsigned int bm)
+		{
+			if (bm == ww::gfx::BM_NORMAL)
+			{
+				glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
+				//glBlendFuncSeparate(GL_SRC_ALPHA,GL_DST_ALPHA,GL_ONE,GL_ONE);
+				//glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+			}
+			if (bm == ww::gfx::BM_ADD)
+			{
+				glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+			}
+			if (bm == ww::gfx::BM_SUBTRACT)
+			{
+			}
+			if (bm == ww::gfx::BM_INVERT)
+			{
+			}
+			if (bm == ww::gfx::BM_MULTIPLY)
+			{
+				glBlendFunc(GL_DST_COLOR, GL_ONE_MINUS_SRC_ALPHA);
+			}
+		}
+	};
+};
