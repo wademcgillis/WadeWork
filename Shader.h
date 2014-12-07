@@ -30,7 +30,7 @@ namespace ww
 			void getUniform_f(GLint uniformID, GLfloat *floats);
 			void getUniform_i(GLint uniformID, GLint *ints);
 
-			void setMatrix(GLint matrixUniformID, float *matrix);
+			void setMatrix(GLint matrixUniformID, const GLfloat *matrix);
 		};
 	}
 }

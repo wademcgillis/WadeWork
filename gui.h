@@ -17,6 +17,9 @@ namespace ww
 		extern void show_control(int control);
 		extern void enable_control(int control);
 		extern void disable_control(int control);
+		// more stuff
+		extern void show_OKdialog(const char* text, const char* caption, int icon = 0);
+		extern bool show_YESNOdialog(const char* text, const char* caption, int icon = 0);
 		// mouse
 		extern bool mouse_left_pressed(int x, int y, int w, int h);
 		extern bool mouse_left_down(int x, int y, int w, int h);
@@ -53,9 +56,11 @@ namespace ww
 		// listbox
 		extern int listbox_create(int parent, unsigned int x, unsigned int y, unsigned int width, unsigned int height);
 		extern int listbox_addstring(int listbox, const char *text);
+		extern void listbox_setstring(int listbox, int index, const char *text);
 		extern void listbox_deletestring(int listbox, int index);
 		extern int listbox_getselectedindex(int listbox);
 		extern void listbox_setselectedindex(int listbox, int index);
+		extern int listbox_getstringcount(int listbox);
 		// text
 		extern int text_create(int parent, unsigned int x, unsigned int y, unsigned int width, unsigned int height, const char *text);
 		// textbox

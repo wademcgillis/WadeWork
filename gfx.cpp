@@ -11,6 +11,7 @@ namespace ww
 		unsigned int window_height = 480;
 
 		RenderTarget *currentRenderTarget = NULL;
+		bool FORCE_GL1 = false;
 
 #if PLATFORM_IOS
 		extern void glBindFramebuffer0();
@@ -36,9 +37,9 @@ namespace ww
 					GL2 = (!(atof(vers) < 2.0f));
 					printf("OpenGL version is %s\n",vers);
 					if (GL2)
-						printf("GL2!\n");
+						printf("GL2 = true\n");
 					else
-						printf("Not GL2!\n");
+						printf("GL2 = false\n");
 				}
 #else
 				std::string vers = (char*)glGetString(GL_VERSION);
@@ -53,8 +54,13 @@ namespace ww
 				[alert show];
 				[alert release];
 #endif
+				if (FORCE_GL1)
+				{
+					printf("Force OpenGL 1.\n"); // Not really. This just forces glew to not function, removing shaders and other things.
+					GL2 = false;
+				}
 			}
-		return GL2;
+			return GL2;
 		}
 
 		void setWindowSize(unsigned int width, unsigned int height)
@@ -98,7 +104,7 @@ namespace ww
 		{
 			if (bm == ww::gfx::BM_NORMAL)
 			{
-				glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
+				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);//, GL_ONE, GL_ONE);
 				//glBlendFuncSeparate(GL_SRC_ALPHA,GL_DST_ALPHA,GL_ONE,GL_ONE);
 				//glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 			}
@@ -114,8 +120,23 @@ namespace ww
 			}
 			if (bm == ww::gfx::BM_MULTIPLY)
 			{
-				glBlendFunc(GL_DST_COLOR, GL_ONE_MINUS_SRC_ALPHA);
+#if 1
+				glBlendFunc(GL_DST_COLOR, GL_ONE_MINUS_SRC_ALPHA);//, GL_ONE, GL_ONE);
+#else
+				glBlendFuncSeparate(GL_DST_COLOR, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
+#endif
+				//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);//
 			}
+		}
+
+		void setMatrix(ww::gfx::Shader *shader, GLint uniform, const GLfloat *matrix)
+		{
+			if (shader == NULL)
+			{
+				glLoadMatrixf(matrix);
+			}
+			else
+				shader->setMatrix(uniform,matrix);
 		}
 	};
 };

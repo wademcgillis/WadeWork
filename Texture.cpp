@@ -79,7 +79,7 @@ namespace ww
 		}
 		
 
-		bool Texture::loadLinearFromMemory(unsigned int *source, unsigned int dataWidth, unsigned int dataHeight)
+		bool Texture::loadLinearFromMemory(unsigned int *source, unsigned int dataWidth, unsigned int dataHeight, bool forceData)
 		{
 			if (textureLoaded)
 				return true;
@@ -95,7 +95,10 @@ namespace ww
 			//printf("loadLinearFromMemory adjusted width and height:\n\t%i x %i\n",width,height);
 			apparentWidth = width;
 			apparentHeight = height;
-			dataPtr = new unsigned int[width*height];
+			if (forceData)
+				dataPtr = source;
+			else
+				dataPtr = new unsigned int[width*height];
 			
 			for(int i=0;i<dataWidth;i++)
 				for(int j=0;j<dataHeight;j++)

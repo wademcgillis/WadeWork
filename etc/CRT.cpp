@@ -82,8 +82,8 @@ namespace ww
 
 			const char *DEFAULT_VERTSHADER = "//#version 120\r\nattribute vec4 position;\r\nattribute vec4 color;\r\nattribute vec2 texcoord0;\r\nuniform mat4 matrix;\r\nvarying vec4 vertexColor;\r\nvarying vec2 texcoord0frag;\r\nvoid main()\r\n{\r\n\tvertexColor = color;\r\n\ttexcoord0frag = texcoord0;\r\n\tgl_Position = matrix * position;\r\n}\0";
 
-			const char *HBLUR_FRAGSHADER = "//#version 120\r\nvarying vec4 vertexColor;\r\nvarying vec2 texcoord0frag;\r\nuniform sampler2D texture;\r\nuniform vec2 texSize;\r\nconst float N = .6;\r\nconst float N_0 = pow(N,0.0);\r\nconst float N_1 = pow(N,1.0);\r\nconst float N_2 = pow(N,2.0);\r\nconst float N_3 = pow(N,3.0);\r\nconst float N_4 = pow(N,4.0);\r\nconst float N_5 = pow(N,5.0);\r\nconst float N_6 = pow(N,6.0);\r\nvoid main()\r\n{	\r\n	vec4 at = texture2D(texture,texcoord0frag);\r\n	gl_FragColor = vec4(vertexColor.rgb * (\r\n	+ N_6 * texture2D(texture,vec2(clamp(texcoord0frag.x-6.0/texSize.x,0.5/texSize.x,1-0.5/texSize.x),texcoord0frag.y))\r\n	+ N_5 * texture2D(texture,vec2(clamp(texcoord0frag.x-5.0/texSize.x,0.5/texSize.x,1-0.5/texSize.x),texcoord0frag.y))\r\n	+ N_4 * texture2D(texture,vec2(clamp(texcoord0frag.x-4.0/texSize.x,0.5/texSize.x,1-0.5/texSize.x),texcoord0frag.y))\r\n	+ N_3 * texture2D(texture,vec2(clamp(texcoord0frag.x-3.0/texSize.x,0.5/texSize.x,1-0.5/texSize.x),texcoord0frag.y))\r\n	+ N_2 * texture2D(texture,vec2(clamp(texcoord0frag.x-2.0/texSize.x,0.5/texSize.x,1-0.5/texSize.x),texcoord0frag.y))\r\n	+ N_1 * texture2D(texture,vec2(clamp(texcoord0frag.x-1.0/texSize.x,0.5/texSize.x,1-0.5/texSize.x),texcoord0frag.y))\r\n	+ .75 * texture2D(texture,texcoord0frag)\r\n	+ N_1 * texture2D(texture,vec2(clamp(texcoord0frag.x+1.0/texSize.x,0.5/texSize.x,1-0.5/texSize.x),texcoord0frag.y))\r\n	+ N_2 * texture2D(texture,vec2(clamp(texcoord0frag.x+2.0/texSize.x,0.5/texSize.x,1-0.5/texSize.x),texcoord0frag.y))\r\n	+ N_3 * texture2D(texture,vec2(clamp(texcoord0frag.x+3.0/texSize.x,0.5/texSize.x,1-0.5/texSize.x),texcoord0frag.y))\r\n	+ N_4 * texture2D(texture,vec2(clamp(texcoord0frag.x+4.0/texSize.x,0.5/texSize.x,1-0.5/texSize.x),texcoord0frag.y))\r\n	+ N_5 * texture2D(texture,vec2(clamp(texcoord0frag.x+5.0/texSize.x,0.5/texSize.x,1-0.5/texSize.x),texcoord0frag.y))\r\n	+ N_6 * texture2D(texture,vec2(clamp(texcoord0frag.x+6.0/texSize.x,0.5/texSize.x,1-0.5/texSize.x),texcoord0frag.y))\r\n	).rgb/2.0, 1.0);\r\n}\0";
-			const char *VBLUR_FRAGSHADER = "//#version 120\r\nvarying vec4 vertexColor;\r\nvarying vec2 texcoord0frag;\r\nuniform sampler2D texture;\r\nuniform vec2 texSize;\r\nconst float N = .6;\r\nconst float N_0 = pow(N,0.0);\r\nconst float N_1 = pow(N,1.0);\r\nconst float N_2 = pow(N,2.0);\r\nconst float N_3 = pow(N,3.0);\r\nconst float N_4 = pow(N,4.0);\r\nconst float N_5 = pow(N,5.0);\r\nconst float N_6 = pow(N,6.0);\r\nvoid main()\r\n{	\r\n	vec4 at = texture2D(texture,texcoord0frag);\r\n	gl_FragColor = vec4(vertexColor.rgb * (\r\n	+ N_6 * texture2D(texture,vec2(texcoord0frag.x,clamp(texcoord0frag.y-6.0/texSize.y,0.5/texSize.y,1-0.5/texSize.y)))\r\n	+ N_5 * texture2D(texture,vec2(texcoord0frag.x,clamp(texcoord0frag.y-5.0/texSize.y,0.5/texSize.y,1-0.5/texSize.y)))\r\n	+ N_4 * texture2D(texture,vec2(texcoord0frag.x,clamp(texcoord0frag.y-4.0/texSize.y,0.5/texSize.y,1-0.5/texSize.y)))\r\n	+ N_3 * texture2D(texture,vec2(texcoord0frag.x,clamp(texcoord0frag.y-3.0/texSize.y,0.5/texSize.y,1-0.5/texSize.y)))\r\n	+ N_2 * texture2D(texture,vec2(texcoord0frag.x,clamp(texcoord0frag.y-2.0/texSize.y,0.5/texSize.y,1-0.5/texSize.y)))\r\n	+ N_1 * texture2D(texture,vec2(texcoord0frag.x,clamp(texcoord0frag.y-1.0/texSize.y,0.5/texSize.y,1-0.5/texSize.y)))\r\n	+ .75 * texture2D(texture,texcoord0frag)\r\n	+ N_1 * texture2D(texture,vec2(texcoord0frag.x,clamp(texcoord0frag.y+1.0/texSize.y,0.5/texSize.y,1-0.5/texSize.y)))\r\n	+ N_2 * texture2D(texture,vec2(texcoord0frag.x,clamp(texcoord0frag.y+2.0/texSize.y,0.5/texSize.y,1-0.5/texSize.y)))\r\n	+ N_3 * texture2D(texture,vec2(texcoord0frag.x,clamp(texcoord0frag.y+3.0/texSize.y,0.5/texSize.y,1-0.5/texSize.y)))\r\n	+ N_4 * texture2D(texture,vec2(texcoord0frag.x,clamp(texcoord0frag.y+4.0/texSize.y,0.5/texSize.y,1-0.5/texSize.y)))\r\n	+ N_5 * texture2D(texture,vec2(texcoord0frag.x,clamp(texcoord0frag.y+5.0/texSize.y,0.5/texSize.y,1-0.5/texSize.y)))\r\n	+ N_6 * texture2D(texture,vec2(texcoord0frag.x,clamp(texcoord0frag.y+6.0/texSize.y,0.5/texSize.y,1-0.5/texSize.y)))\r\n	).rgb/2.0, 1.0);\r\n}\0";
+			const char *HBLUR_FRAGSHADER = "//#version 120\r\nvarying vec4 vertexColor;\r\nvarying vec2 texcoord0frag;\r\nuniform sampler2D texture;\r\nuniform vec2 texSize;\r\nconst float N = .63;\r\nconst float N_0 = pow(N,0.0);\r\nconst float N_1 = pow(N,1.0);\r\nconst float N_2 = pow(N,2.0);\r\nconst float N_3 = pow(N,3.0);\r\nconst float N_4 = pow(N,4.0);\r\nconst float N_5 = pow(N,5.0);\r\nconst float N_6 = pow(N,6.0);\r\nvoid main()\r\n{	\r\n	vec4 at = texture2D(texture,texcoord0frag);\r\n	gl_FragColor = vec4(vertexColor.rgb * (\r\n	+ N_6 * texture2D(texture,vec2(clamp(texcoord0frag.x-6.0/texSize.x,0.5/texSize.x,1-0.5/texSize.x),texcoord0frag.y))\r\n	+ N_5 * texture2D(texture,vec2(clamp(texcoord0frag.x-5.0/texSize.x,0.5/texSize.x,1-0.5/texSize.x),texcoord0frag.y))\r\n	+ N_4 * texture2D(texture,vec2(clamp(texcoord0frag.x-4.0/texSize.x,0.5/texSize.x,1-0.5/texSize.x),texcoord0frag.y))\r\n	+ N_3 * texture2D(texture,vec2(clamp(texcoord0frag.x-3.0/texSize.x,0.5/texSize.x,1-0.5/texSize.x),texcoord0frag.y))\r\n	+ N_2 * texture2D(texture,vec2(clamp(texcoord0frag.x-2.0/texSize.x,0.5/texSize.x,1-0.5/texSize.x),texcoord0frag.y))\r\n	+ N_1 * texture2D(texture,vec2(clamp(texcoord0frag.x-1.0/texSize.x,0.5/texSize.x,1-0.5/texSize.x),texcoord0frag.y))\r\n	+ 0.75 * texture2D(texture,texcoord0frag)\r\n	+ N_1 * texture2D(texture,vec2(clamp(texcoord0frag.x+1.0/texSize.x,0.5/texSize.x,1-0.5/texSize.x),texcoord0frag.y))\r\n	+ N_2 * texture2D(texture,vec2(clamp(texcoord0frag.x+2.0/texSize.x,0.5/texSize.x,1-0.5/texSize.x),texcoord0frag.y))\r\n	+ N_3 * texture2D(texture,vec2(clamp(texcoord0frag.x+3.0/texSize.x,0.5/texSize.x,1-0.5/texSize.x),texcoord0frag.y))\r\n	+ N_4 * texture2D(texture,vec2(clamp(texcoord0frag.x+4.0/texSize.x,0.5/texSize.x,1-0.5/texSize.x),texcoord0frag.y))\r\n	+ N_5 * texture2D(texture,vec2(clamp(texcoord0frag.x+5.0/texSize.x,0.5/texSize.x,1-0.5/texSize.x),texcoord0frag.y))\r\n	+ N_6 * texture2D(texture,vec2(clamp(texcoord0frag.x+6.0/texSize.x,0.5/texSize.x,1-0.5/texSize.x),texcoord0frag.y))\r\n	).rgb/2.0, 1.0);\r\n}\0";
+			const char *VBLUR_FRAGSHADER = "//#version 120\r\nvarying vec4 vertexColor;\r\nvarying vec2 texcoord0frag;\r\nuniform sampler2D texture;\r\nuniform vec2 texSize;\r\nconst float N = .63;\r\nconst float N_0 = pow(N,0.0);\r\nconst float N_1 = pow(N,1.0);\r\nconst float N_2 = pow(N,2.0);\r\nconst float N_3 = pow(N,3.0);\r\nconst float N_4 = pow(N,4.0);\r\nconst float N_5 = pow(N,5.0);\r\nconst float N_6 = pow(N,6.0);\r\nvoid main()\r\n{	\r\n	vec4 at = texture2D(texture,texcoord0frag);\r\n	gl_FragColor = vec4(vertexColor.rgb * (\r\n	+ N_6 * texture2D(texture,vec2(texcoord0frag.x,clamp(texcoord0frag.y-6.0/texSize.y,0.5/texSize.y,1-0.5/texSize.y)))\r\n	+ N_5 * texture2D(texture,vec2(texcoord0frag.x,clamp(texcoord0frag.y-5.0/texSize.y,0.5/texSize.y,1-0.5/texSize.y)))\r\n	+ N_4 * texture2D(texture,vec2(texcoord0frag.x,clamp(texcoord0frag.y-4.0/texSize.y,0.5/texSize.y,1-0.5/texSize.y)))\r\n	+ N_3 * texture2D(texture,vec2(texcoord0frag.x,clamp(texcoord0frag.y-3.0/texSize.y,0.5/texSize.y,1-0.5/texSize.y)))\r\n	+ N_2 * texture2D(texture,vec2(texcoord0frag.x,clamp(texcoord0frag.y-2.0/texSize.y,0.5/texSize.y,1-0.5/texSize.y)))\r\n	+ N_1 * texture2D(texture,vec2(texcoord0frag.x,clamp(texcoord0frag.y-1.0/texSize.y,0.5/texSize.y,1-0.5/texSize.y)))\r\n	+ 0.75 * texture2D(texture,texcoord0frag)\r\n	+ N_1 * texture2D(texture,vec2(texcoord0frag.x,clamp(texcoord0frag.y+1.0/texSize.y,0.5/texSize.y,1-0.5/texSize.y)))\r\n	+ N_2 * texture2D(texture,vec2(texcoord0frag.x,clamp(texcoord0frag.y+2.0/texSize.y,0.5/texSize.y,1-0.5/texSize.y)))\r\n	+ N_3 * texture2D(texture,vec2(texcoord0frag.x,clamp(texcoord0frag.y+3.0/texSize.y,0.5/texSize.y,1-0.5/texSize.y)))\r\n	+ N_4 * texture2D(texture,vec2(texcoord0frag.x,clamp(texcoord0frag.y+4.0/texSize.y,0.5/texSize.y,1-0.5/texSize.y)))\r\n	+ N_5 * texture2D(texture,vec2(texcoord0frag.x,clamp(texcoord0frag.y+5.0/texSize.y,0.5/texSize.y,1-0.5/texSize.y)))\r\n	+ N_6 * texture2D(texture,vec2(texcoord0frag.x,clamp(texcoord0frag.y+6.0/texSize.y,0.5/texSize.y,1-0.5/texSize.y)))\r\n	).rgb/2.0, 1.0);\r\n}\0";
 			const char *LIGHTEN_FRAGSHADER = "//#version 120\r\nvarying vec4 vertexColor;\r\nvarying vec2 texcoord0frag;\r\nuniform sampler2D texture;\r\n\r\nvoid main()\r\n{\r\n	vec4 col = texture2D(texture,texcoord0frag);\r\n	col.r = .05+col.r * .95;\r\n	col.g = .05+col.g * .95;\r\n	col.b = .05+col.b * .95;\r\n	gl_FragColor = vertexColor * col;//vec4(vertexColor.rgb * col.rgb, .5);\r\n}\0";
 
 			builder.reset();
@@ -153,6 +153,15 @@ namespace ww
 				OUTPUT1[i]->getTexture()->setLinearInterpolation(i > 0);
 				OUTPUT2[i] = new ww::gfx::RenderTarget(W,H);
 				OUTPUT2[i]->getTexture()->setLinearInterpolation(i > 0);
+				if (i > 0)
+				{
+					OUTPUT1[i]->getTexture()->bind();
+					glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP);
+					glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP);
+					OUTPUT2[i]->getTexture()->bind();
+					glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP);
+					glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP);
+				}
 			}
 
 			const unsigned int RESOLUTION = 15;
@@ -235,13 +244,14 @@ namespace ww
 				batchBACK.pushvertex(ww::gfx::MakeVertex(0,1,0,0xFFFFFFFF,	x1,	y1));
 			batchBACK.update();
 
+			unsigned int A = 0x10;
 			batchBACK_ALPHA.clear();
-				batchBACK_ALPHA.pushvertex(ww::gfx::MakeVertex(1,1,0,0x20FFFFFF,	x2,	y2));
-				batchBACK_ALPHA.pushvertex(ww::gfx::MakeVertex(1,0,0,0x20FFFFFF,	x2,	y1));
-				batchBACK_ALPHA.pushvertex(ww::gfx::MakeVertex(0,0,0,0x20FFFFFF,	x1,	y1));
-				batchBACK_ALPHA.pushvertex(ww::gfx::MakeVertex(1,1,0,0x20FFFFFF,	x2,	y2));
-				batchBACK_ALPHA.pushvertex(ww::gfx::MakeVertex(0,0,0,0x20FFFFFF,	x1,	y1));
-				batchBACK_ALPHA.pushvertex(ww::gfx::MakeVertex(0,1,0,0x20FFFFFF,	x1,	y2));
+				batchBACK_ALPHA.pushvertex(ww::gfx::MakeVertex(1,1,0,0x00FFFFFF | (A << 24),	x2,	y2));
+				batchBACK_ALPHA.pushvertex(ww::gfx::MakeVertex(1,0,0,0x00FFFFFF | (A << 24),	x2,	y1));
+				batchBACK_ALPHA.pushvertex(ww::gfx::MakeVertex(0,0,0,0x00FFFFFF | (A << 24),	x1,	y1));
+				batchBACK_ALPHA.pushvertex(ww::gfx::MakeVertex(1,1,0,0x00FFFFFF | (A << 24),	x2,	y2));
+				batchBACK_ALPHA.pushvertex(ww::gfx::MakeVertex(0,0,0,0x00FFFFFF | (A << 24),	x1,	y1));
+				batchBACK_ALPHA.pushvertex(ww::gfx::MakeVertex(0,1,0,0x00FFFFFF | (A << 24),	x1,	y2));
 			batchBACK_ALPHA.update();
 
 			/*x1 = .5f/(float)scanlineTexture->getWidth();
@@ -315,11 +325,13 @@ namespace ww
 				SOURCE->getTexture()->bind();
 				batchBACK.draw();
 
+				ww::gfx::setBlendMode(ww::gfx::BM_ADD);
 				for(int i=0;i<BLOOM_COUNT;i++)
 				{
 					OUTPUT1[i]->getTexture()->bind();
 					batchBACK_ALPHA.draw();
 				}
+				ww::gfx::setBlendMode(ww::gfx::BM_NORMAL);
 			ww::gfx::resetRenderTarget();
 		}
 		void CRT::draw()

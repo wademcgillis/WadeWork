@@ -30,6 +30,15 @@ namespace ww
 		{
 			return (void*)vertices;
 		}
+		VertexBatch::~VertexBatch()
+		{
+			if (ww::gfx::supportsOpenGL2())
+			{
+				glDeleteBuffers(1,&vertexBuffer);
+				glDeleteVertexArrays(1,&vertexArray);
+			}
+			delete vertices;
+		}
 		void VertexBatch::init()
 		{
 			initialized = true;
@@ -55,7 +64,7 @@ namespace ww
 
 			if (ww::gfx::supportsOpenGL2())
 			{
-				printf("DOING VERTEX ARRAYS AND STUFF\n");
+				//printf("DOING VERTEX ARRAYS AND STUFF\n");
 				glGenVertexArrays(1, &vertexArray);
 				glBindVertexArray(vertexArray);
 				glGenBuffers(1, &vertexBuffer);
@@ -140,6 +149,8 @@ namespace ww
 		}
 		void VertexBatch::draw(unsigned int vertexType)
 		{
+			if (vertexCount == 0)
+				return;
 			if (ww::gfx::supportsOpenGL2())
 			{
 				if (dirty)

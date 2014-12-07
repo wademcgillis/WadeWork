@@ -1,10 +1,17 @@
 #include <WadeWork/utils.h>
 #include <climits>
 #include <iostream>
+#include <WadeWork/ext/stb_image/stb_image.h>
+
 namespace ww
 {
 	namespace utils
 	{
+		unsigned char *load_image(const char *path, int *width, int *height)
+		{
+			return stbi_load(path,width,height,NULL,false);
+		}
+
 		namespace random
 		{
 			inline unsigned int bitshiftWrapRight(unsigned int n, unsigned int shift)

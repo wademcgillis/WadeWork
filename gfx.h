@@ -4,6 +4,7 @@
 #include <WadeWork/opengl.h>
 
 #include <WadeWork/RenderTarget.h>
+#include <WadeWork/Shader.h>
 namespace ww
 {
 	namespace gfx
@@ -28,12 +29,13 @@ namespace ww
 		extern RenderTarget *getRenderTarget();
 
 		extern void display();
+
+		extern void setMatrix(ww::gfx::Shader *shader, GLint uniform, const GLfloat *matrix);
 	};
 };
 
 
 #include <WadeWork/VertexBatch.h>
 #include <WadeWork/Texture.h>
-#include <WadeWork/Shader.h>
 #include <WadeWork/ShaderBuilder.h>
 #endif

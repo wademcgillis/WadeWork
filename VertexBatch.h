@@ -67,6 +67,7 @@ namespace ww
 			bool loadOBJ(const char *fname);
 			VertexBatch(bool normals);
 			VertexBatch();
+			~VertexBatch();
 			//void pushsprite(Sprite *sprite);
 			void pushvertex(Vertex v);
 			void pushvertices(Vertex *vs, unsigned int number);
@@ -75,7 +76,6 @@ namespace ww
 			void *getVertices();
 			unsigned int getVertexCount();
 			bool hasNormals();
-			void freegl();
 			void clear();
 			void update();
 			void draw(unsigned int vertexType = GL_TRIANGLES);

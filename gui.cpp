@@ -23,7 +23,7 @@ namespace ww
 		void paint_rectangle(int,int,int,int,unsigned int);
 
 		const unsigned int ELEMENTS = 128;
-		const unsigned int MAX_ELEMENTS_TO_BE_UPDATED_PER_TICK = 32;
+		const unsigned int MAX_ELEMENTS_TO_BE_UPDATED_PER_TICK = 64;
 
 		bool wmpainting;
 
@@ -36,7 +36,7 @@ namespace ww
 		HTREEITEM treeitems[ELEMENTS];
 		int TREEITEM_ID = 0;
 
-		HWND hwnds[ELEMENTS];
+		HWND hwnds[ELEMENTS*3];
 		int HWND_ID = 0;
 
 		HMENU menus[ELEMENTS];
@@ -423,6 +423,78 @@ namespace ww
 			SetWindowPos(hwnds[element],HWND_BOTTOM,0,0,0,0,SWP_NOMOVE|SWP_NOSIZE);
 		}
 
+		void show_OKdialog(const char* text, const char *caption, int icon)
+		{
+			DWORD iconflag = 0;
+			switch(icon)
+			{
+			case 1:
+				iconflag = MB_ICONASTERISK;
+				break;
+			case 2:
+				iconflag = MB_ICONERROR;
+				break;
+			case 3:
+				iconflag = MB_ICONEXCLAMATION;
+				break;
+			case 4:
+				iconflag = MB_ICONHAND;
+				break;
+			case 5:
+				iconflag = MB_ICONINFORMATION;
+				break;
+			case 6:
+				iconflag = MB_ICONMASK;
+				break;
+			case 7:
+				iconflag = MB_ICONQUESTION;
+				break;
+			case 8:
+				iconflag = MB_ICONSTOP;
+				break;
+			case 9:
+				iconflag = MB_ICONWARNING;
+				break;
+			}
+			MessageBoxA(NULL,text,caption,MB_OK | iconflag);
+		}
+
+		bool show_YESNOdialog(const char* text, const char *caption, int icon)
+		{
+			DWORD iconflag = 0;
+			switch(icon)
+			{
+			case 1:
+				iconflag = MB_ICONASTERISK;
+				break;
+			case 2:
+				iconflag = MB_ICONERROR;
+				break;
+			case 3:
+				iconflag = MB_ICONEXCLAMATION;
+				break;
+			case 4:
+				iconflag = MB_ICONHAND;
+				break;
+			case 5:
+				iconflag = MB_ICONINFORMATION;
+				break;
+			case 6:
+				iconflag = MB_ICONMASK;
+				break;
+			case 7:
+				iconflag = MB_ICONQUESTION;
+				break;
+			case 8:
+				iconflag = MB_ICONSTOP;
+				break;
+			case 9:
+				iconflag = MB_ICONWARNING;
+				break;
+			}
+			return (MessageBoxA(NULL,text,caption,MB_YESNO | iconflag) == IDYES);
+		}
+
 		//	***********************************************************************************************************
 		//																											  *
 		//																											  *
@@ -755,6 +827,12 @@ namespace ww
 			SendMessage(hwnds[listbox],(UINT) LB_DELETESTRING,(WPARAM) index,(LPARAM) 0);
 		}
 
+		void listbox_setstring(int listbox, int index, const char *text)
+		{
+			SendMessage(hwnds[listbox],(UINT) LB_DELETESTRING,(WPARAM) index,(LPARAM) 0);
+			SendMessage(hwnds[listbox],(UINT) LB_INSERTSTRING,(WPARAM) index,(LPARAM) text);
+		}
+
 		int listbox_getselectedindex(int listbox)
 		{
 			return listboxes_activeindex[listbox];
@@ -764,6 +842,11 @@ namespace ww
 		{
 			listboxes_activeindex[listbox] = index;
 			SendMessage(hwnds[listbox],LB_SETCURSEL,index,0);
+		}
+
+		int listbox_getstringcount(int listbox)
+		{
+			return SendMessage(hwnds[listbox],LB_GETCOUNT,0,0);
 		}
 
 		//	***********************************************************************************************************
@@ -875,6 +958,7 @@ namespace ww
 		{
 			MENU_ID++;
 			HWND_ID++;
+			printf("HWND = %i\n",HWND_ID);
 			hwnds[HWND_ID] = CreateWindowExA(0,WC_BUTTONA,text,
 				WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_PUSHBUTTON,
 				x,y,width,height,hwnds[parent],(HMENU)HWND_ID,(HINSTANCE)GetWindowLong(NULL, GWL_HINSTANCE),NULL);
@@ -902,8 +986,11 @@ namespace ww
 		bool button_check(int button)
 		{
 			for(unsigned int i=0;i<controlevents_count;i++)
+			{
+				printf("%i\n",i);
 				if (controlevents[i].hwnd == hwnds[button])
 					return true;
+			}
 			return false;
 		}
 
@@ -1365,7 +1452,7 @@ namespace ww
 			lvI.iItem  = SendMessage(hwnds[listview],LVM_GETITEMCOUNT,0,0);
 			lvI.iImage = image;
 			SendMessage(hwnds[listview],LVM_INSERTITEM,0,(LPARAM)&lvI);
-			return SendMessage(hwnds[listview],LVM_GETITEMCOUNT,0,0);
+			return SendMessage(hwnds[listview],LVM_GETITEMCOUNT,0,0)-1;
 		}
 
 		int listview_get_selected(int listview)

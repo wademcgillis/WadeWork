@@ -4,6 +4,8 @@ namespace ww
 {
 	namespace utils
 	{
+		extern unsigned char *load_image(const char *path, int *width, int *height);
+
 		namespace random
 		{
 			extern void seed(unsigned int n);

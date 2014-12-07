@@ -8,7 +8,7 @@
 #endif
 
 #include <WadeWork/wadework.h>
-#include <SFML/Graphics.hpp>
+#include <SFML/Window.hpp>
 
 #if PLATFORM_WINDOWS
 #include <windows.h>
@@ -18,15 +18,9 @@
 #ifdef DEBUG
 #pragma comment(lib,"sfml-system-s-d.lib")
 #pragma comment(lib,"sfml-window-s-d.lib")
-//#pragma comment(lib,"sfml-graphics-s.lib")
-#pragma comment(lib,"sfml-audio-s-d.lib")
-//#pragma comment(lib,"sfml-network-s.lib")
 #else
 #pragma comment(lib,"sfml-system-s.lib")
 #pragma comment(lib,"sfml-window-s.lib")
-//#pragma comment(lib,"sfml-graphics-s.lib")
-#pragma comment(lib,"sfml-audio-s.lib")
-//#pragma comment(lib,"sfml-network-s.lib")
 #endif
 #ifndef DISABLE_XINPUT
 #pragma comment(lib,"xinput.lib")
@@ -36,6 +30,7 @@
 #pragma comment(lib,"iphlpapi.lib")
 #pragma comment(lib,"glew.lib")
 #pragma comment(lib, "User32.lib")
+#pragma comment(lib, "openal32.lib")
 #endif
 
 namespace ww
@@ -46,6 +41,8 @@ namespace ww
 		extern unsigned int window_width;
 		extern unsigned int window_height;
 		extern void display();
+
+		extern bool FORCE_GL1;
 	}
 
 	namespace sfx
@@ -128,8 +125,13 @@ namespace ww
 
 		int setup(unsigned int config)
 		{
-			ww::gui::initialize();
 			CONFIG = config;
+			ww::gui::initialize();
+			if (CONFIG & ww::sys::CONFIG_OPENGL1)
+			{
+				ww::gfx::FORCE_GL1 = true;
+				printf("HO HO HO OPENGL1!!!!!!\n");
+			}
 #if PLATFORM_WINDOWS
 			timeBeginPeriod(1);
 			WSADATA wsaData;
@@ -147,6 +149,7 @@ namespace ww
 #if PLATFORM_WINDOWS
 			if (CONFIG & ww::sys::CONFIG_OPENGL2)
 			{
+				printf("ABOUT  TO CALL!!!\n");
 				if (ww::gfx::supportsOpenGL2())
 					glewInit();
 			}
@@ -159,9 +162,9 @@ namespace ww
 			glEnableClientState(GL_COLOR_ARRAY);
 			glEnable(GL_TEXTURE_2D);
 			glEnable(GL_BLEND);
-			glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);//_MINUS_SRC_ALPHA);GL_SRC_ALPHA,GL_DST_ALPHA,GL_ONE,GL_ONE);//
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);//glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);//_MINUS_SRC_ALPHA);GL_SRC_ALPHA,GL_DST_ALPHA,GL_ONE,GL_ONE);//
 			//glBlendFunc(GL_SRC_ALPHA, GL_DST_ALPHA);//GL_ONE_MINUS_SRC_ALPHA);
-			//glEnable(GL_CULL_FACE);
+			glDisable(GL_CULL_FACE);
 			//glFrontFace(GL_CCW);
 
 			if (~CONFIG & ww::sys::CONFIG_DISABLE_OPENGL_DEPTHBUFFER)

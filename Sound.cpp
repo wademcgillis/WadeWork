@@ -73,7 +73,7 @@ namespace ww
 			alBufferData(buffer, AL_FORMAT_MONO8, data, count, rate);
 			alGenSources((ALuint)1, &source);
 			alSourcef(source, AL_PITCH, 1.f);
-			alSourcef(source, AL_GAIN, 1.f);
+			alSourcef(source, AL_GAIN, 3.f);
 			alSource3f(source, AL_POSITION, 0, 0, 0);
 			alSource3f(source, AL_VELOCITY, 0, 0, 0);
 			alSourcei(source, AL_LOOPING, AL_FALSE);

@@ -98,7 +98,7 @@ namespace ww
 				printf("Uniform with name %s not found\n",uniformID);
 		}
 
-		void Shader::setMatrix(GLint matrixUniformID, float *matrix)
+		void Shader::setMatrix(GLint matrixUniformID, const GLfloat *matrix)
 		{
 			glUniformMatrix4fv(matrixUniformID, 1, GL_FALSE, matrix);
 		}

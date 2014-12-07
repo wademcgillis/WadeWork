@@ -37,7 +37,8 @@ namespace ww
 			bool load(const unsigned char* pointer, unsigned int size);
 #endif
 			Texture(GLuint texID, unsigned int width, unsigned int height);
-			bool loadLinearFromMemory(unsigned int *source, unsigned int w, unsigned int h);
+			// ONLY USE FORCEDATA IF YOUR DATA IS POWER OF TWO AND THE CORRECT DIMENSIONS.
+			bool loadLinearFromMemory(unsigned int *source, unsigned int w, unsigned int h, bool forceData = false);
 			
 			void setLinearInterpolation(bool linear);
 
