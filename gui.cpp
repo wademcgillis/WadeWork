@@ -25,6 +25,7 @@ namespace ww
 		const unsigned int ELEMENTS = 128;
 		const unsigned int MAX_ELEMENTS_TO_BE_UPDATED_PER_TICK = 64;
 
+		bool initialized = false;
 		bool wmpainting;
 
 		HBITMAP images[ELEMENTS];
@@ -185,8 +186,11 @@ namespace ww
 				{
 				case BN_CLICKED:
 					//printf("Button clicked! lParam: %u wLO: %i\n",lParam,wLO);
-					controlevents[controlevents_count++].hwnd = (HWND)lParam;
-					controlevents[controlevents_count++].id = wLO;
+					int K;
+					K = controlevents_count++;
+					controlevents[K].hwnd = (HWND)lParam;
+					controlevents[K].id = wLO;
+					//printf("Button clicked! HANDLE TO CHECK IS %i\n",controlevents[K].hwnd);
 					break;
 				case CBN_SELCHANGE:
 					//printf("CBN_SELCHANGE! lParam: %u wLO: %i\n",lParam);
@@ -199,8 +203,8 @@ namespace ww
 							listboxes_activeindex[i] = (int)SendMessage((HWND)lParam,LB_GETCURSEL,0,0);
 					break;
 				default:
-					if (wHI != 768 && wHI != 1024)
-						printf("wHI not handled: %u\n",wHI);
+					//if (wHI != 768 && wHI != 1024)
+					//	printf("wHI not handled: %u\n",wHI);
 					break;
 				}
 				break;
@@ -225,7 +229,14 @@ namespace ww
 					}
 				}
 				if (code == TCN_SELCHANGE)
-					controlevents[controlevents_count++].hwnd = (HWND)SendMessage(((NMHDR*)lParam)->hwndFrom,TCM_GETCURSEL,0,0);
+				{
+					//printf("Button clicked! lParam: %u wLO: %i\n",lParam,wLO);
+					int K;
+					K = controlevents_count++;
+					controlevents[K].hwnd = (HWND)SendMessage(((NMHDR*)lParam)->hwndFrom,TCM_GETCURSEL,0,0);
+					controlevents[K].id = -1;
+					//printf("SelChg clicked! HANDLE TO CHECK IS %i\n",controlevents[K].hwnd);
+				}
 				if (code == TVN_SELCHANGED)
 				{
 					TV = (NMTREEVIEW*)lParam;
@@ -308,7 +319,7 @@ namespace ww
 				handle_win32_event(Handle, Message,wParam,lParam);
 				break;
 			case WM_HSCROLL: case WM_VSCROLL:
-				printf("V wHi = %i\twLO = %i\tlHi = %i\tlLO = %i\n",wHI,wLO,lHI,lLO);//,SetScrollPos((HWND)lParam,SB_CTL,wHI,TRUE));
+				//printf("V wHi = %i\twLO = %i\tlHi = %i\tlLO = %i\n",wHI,wLO,lHI,lLO);//,SetScrollPos((HWND)lParam,SB_CTL,wHI,TRUE));
 				if (wLO == 5)
 					SetScrollPos((HWND)lParam,SB_CTL,wHI,TRUE);
 				else if (wLO == 1)
@@ -343,6 +354,9 @@ namespace ww
 
 		void initialize()
 		{
+			if (initialized)
+				return;
+			initialized = true;
 			wmpainting = false;
 			paintFuncPtr = NULL;
 			rectcolor = 0x00FFFFFF;
@@ -623,12 +637,12 @@ namespace ww
 			RECT inner, outer;
 			GetWindowRect(hwnd, &outer);
 			GetClientRect(hwnd, &inner);
-			printf("Window: %i %i %i %i\n",outer.left,outer.top,outer.right-outer.left,outer.bottom-outer.top);
-			printf("Client: %i %i %i %i\n",inner.left,inner.top,inner.right-inner.left,inner.bottom-inner.top);
+			//printf("Window: %i %i %i %i\n",outer.left,outer.top,outer.right-outer.left,outer.bottom-outer.top);
+			//printf("Client: %i %i %i %i\n",inner.left,inner.top,inner.right-inner.left,inner.bottom-inner.top);
 			int dx = (outer.right - outer.left) - inner.right;
-			printf("Style: %u\n",GetWindowLong(hwnd,GWL_STYLE));
-			printf("MENU: %u\n",WS_SYSMENU);
-			printf(" S&M: %u\n",GetWindowLong(hwnd,GWL_STYLE) & WS_SYSMENU);
+			//printf("Style: %u\n",GetWindowLong(hwnd,GWL_STYLE));
+			//printf("MENU: %u\n",WS_SYSMENU);
+			//printf(" S&M: %u\n",GetWindowLong(hwnd,GWL_STYLE) & WS_SYSMENU);
 			int h = 0;
 			if ((GetWindowLong(hwnd,GWL_STYLE) & WS_SYSMENU) > 0)
 				h = GetSystemMetrics(SM_CYMENU);
@@ -641,13 +655,13 @@ namespace ww
 			HWND_ID++;
 			NONCLIENTMETRICS bob;
 			SystemParametersInfo(SPI_GETNONCLIENTMETRICS,sizeof(NONCLIENTMETRICS),&bob,NULL);
-			printf("BorderWidth: %i\n",bob.iBorderWidth);
-			printf("MenuHeight: %i\n",bob.iMenuHeight);
+			//printf("BorderWidth: %i\n",bob.iBorderWidth);
+			//printf("MenuHeight: %i\n",bob.iMenuHeight);
 			DWORD flags = 0;
 			DWORD superflags = 0;
 			if (parent != NULL)
 			{
-				printf("WE GOT A PARENT\n");
+				//printf("WE GOT A PARENT\n");
 				flags = 0;//WS_CAPTION | WS_SYSMENU;
 				superflags = WS_EX_TOOLWINDOW | WS_EX_APPWINDOW;
 			}
@@ -958,7 +972,7 @@ namespace ww
 		{
 			MENU_ID++;
 			HWND_ID++;
-			printf("HWND = %i\n",HWND_ID);
+			//printf("HWND = %i\n",HWND_ID);
 			hwnds[HWND_ID] = CreateWindowExA(0,WC_BUTTONA,text,
 				WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_PUSHBUTTON,
 				x,y,width,height,hwnds[parent],(HMENU)HWND_ID,(HINSTANCE)GetWindowLong(NULL, GWL_HINSTANCE),NULL);
@@ -986,11 +1000,8 @@ namespace ww
 		bool button_check(int button)
 		{
 			for(unsigned int i=0;i<controlevents_count;i++)
-			{
-				printf("%i\n",i);
 				if (controlevents[i].hwnd == hwnds[button])
 					return true;
-			}
 			return false;
 		}
 
@@ -1216,7 +1227,7 @@ namespace ww
 		{
 			BITMAP dabitmap;
 			GetObject(bitmap, sizeof(dabitmap), &dabitmap);
-			printf("set bitmap : w %i h %i ptr %X\n",dabitmap.bmWidth,dabitmap.bmHeight,(unsigned int)dabitmap.bmBits);
+			//printf("set bitmap : w %i h %i ptr %X\n",dabitmap.bmWidth,dabitmap.bmHeight,(unsigned int)dabitmap.bmBits);
 			//BitBlt(imagedraw_destHDC, x, y, bitmap.bmWidth, bitmap.bmHeight, imagedraw_srcHDC, 0, 0, SRCCOPY);
 
 

@@ -27,13 +27,19 @@ namespace ww
 	}
 
 	template <typename T>
-	inline Rectangle<T>::Rectangle() : x(0), y(0), width(0), height(0)
+	inline Rectangle<T>::Rectangle() : x(0), y(0), width(0), height(0), xoffset(0), yoffset(0)
 	{
 
 	}
 
 	template <typename T>
-	inline Rectangle<T>::Rectangle(T X, T Y, T W, T H) : x(X), y(Y), width(W), height(H)
+	inline Rectangle<T>::Rectangle(T X, T Y, T W, T H) : x(X), y(Y), width(W), height(H), xoffset(0), yoffset(0)
+	{
+
+	}
+
+	template <typename T>
+	inline Rectangle<T>::Rectangle(T X, T Y, T W, T H, T OX, T OY) : x(X), y(Y), width(W), height(H), xoffset(OX), yoffset(OY)
 	{
 
 	}
@@ -41,13 +47,13 @@ namespace ww
 	template <typename T>
 	inline bool Rectangle<T>::intersects(Rectangle<T> R)
 	{
-		if (y > R.y+R.height)
+		if (x+xoffset > R.x+R.xoffset+R.width-1)
 			return false;
-		if (x > R.x+R.width)
+		if (y+yoffset > R.y+R.yoffset+R.height-1)
 			return false;
-		if (x+width < R.x)
+		if (x+xoffset+width-1 < R.x+R.xoffset)
 			return false;
-		if (y+height < R.y)
+		if (y+yoffset+height-1 < R.y+R.yoffset)
 			return false;
 		return true;
 	}

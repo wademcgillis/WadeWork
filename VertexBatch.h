@@ -5,7 +5,7 @@ namespace ww
 {
 	namespace gfx
 	{
-		const unsigned int MAX_VERTEXBATCH_TRIANGLE_COUNT = 0xfff;
+		const unsigned int MAX_VERTEXBATCH_TRIANGLE_COUNT = 0x1fff;
 		class Sprite;
 
 		typedef struct

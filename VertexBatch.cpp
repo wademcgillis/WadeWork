@@ -84,8 +84,8 @@ namespace ww
 				glBindBuffer(GL_ARRAY_BUFFER, 0);
 				glBindVertexArray(0);
 			}
-			else
-				printf("NOPENGL2\n");
+			//else
+			//	printf("NOPENGL2\n");
 			vertexCount = 0;
 			//glMapBufferOES(vertexbuffer, GL_WRITE_ONLY_OES);
 		}

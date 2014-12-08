@@ -42,9 +42,14 @@ namespace ww
 		T width;
 		T height;
 
+		T xoffset;
+		T yoffset;
+
 		Rectangle();
 
 		Rectangle(T x, T y, T width, T height);
+
+		Rectangle(T x, T y, T width, T height, T xoffset, T yoffset);
 
 		bool intersects(Rectangle R);
 	};
