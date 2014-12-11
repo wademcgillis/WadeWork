@@ -19,6 +19,7 @@ namespace ww
 		mode = READ;
 		position = 0;
 		_arraySize = 0;
+		flipped = false;
 	}
 	
 	void binaryUCHAR(unsigned char number)
@@ -189,6 +190,11 @@ namespace ww
 		_arraySize = length;
 	}
 	
+	void Buffer::readflippedbytes(bool flip)
+	{
+		flipped = flip;
+	}
+
 	void Buffer::setmode(unsigned int mod)
 	{
 		mode = mod;
@@ -312,7 +318,7 @@ namespace ww
 		_length += sizeof(short);
 	}
 	
-	short Buffer::readint16()
+short Buffer::readint16()
 	{
 		if (mode != READ)
 		{
@@ -322,8 +328,16 @@ namespace ww
 		if (position + sizeof(short) <= _length)
 		{
 			short s = 0;
-			((char*)&s)[0] = _bytes[position+0];
-			((char*)&s)[1] = _bytes[position+1];
+			if (flipped)
+			{
+				((char*)&s)[0] = _bytes[position+1];
+				((char*)&s)[1] = _bytes[position+0];
+			}
+			else
+			{
+				((char*)&s)[0] = _bytes[position+0];
+				((char*)&s)[1] = _bytes[position+1];
+			}
 			//printf("readint16() : %X %X => %X\n",((unsigned char*)&s)[0],((unsigned char*)&s)[1],s);
 			position += sizeof(short);
 			return s;
@@ -372,8 +386,16 @@ namespace ww
 		if (position + sizeof(unsigned short) <= _length)
 		{
 			unsigned short s = 0;
-			((unsigned char*)&s)[0] = _bytes[position+0];
-			((unsigned char*)&s)[1] = _bytes[position+1];
+			if (flipped)
+			{
+				((unsigned char*)&s)[0] = _bytes[position+1];
+				((unsigned char*)&s)[1] = _bytes[position+0];
+			}
+			else
+			{
+				((unsigned char*)&s)[0] = _bytes[position+0];
+				((unsigned char*)&s)[1] = _bytes[position+1];
+			}
 			//printf("readuint16() : %X %X => %X\n",((unsigned char*)&s)[0],((unsigned char*)&s)[1],s);
 			position += sizeof(unsigned short);
 			return s;
@@ -431,10 +453,20 @@ namespace ww
 		if (position + sizeof(int) <= _length)
 		{
 			int s = 0;
-			((char*)&s)[0] = _bytes[position+0];
-			((char*)&s)[1] = _bytes[position+1];
-			((char*)&s)[2] = _bytes[position+2];
-			((char*)&s)[3] = _bytes[position+3];
+			if (flipped)
+			{
+				((char*)&s)[0] = _bytes[position+3];
+				((char*)&s)[1] = _bytes[position+2];
+				((char*)&s)[2] = _bytes[position+1];
+				((char*)&s)[3] = _bytes[position+0];
+			}
+			else
+			{
+				((char*)&s)[0] = _bytes[position+0];
+				((char*)&s)[1] = _bytes[position+1];
+				((char*)&s)[2] = _bytes[position+2];
+				((char*)&s)[3] = _bytes[position+3];
+			}
 			position += sizeof(int);
 			return s;
 		}
@@ -483,10 +515,20 @@ namespace ww
 		if (position + sizeof(unsigned int) <= _length)
 		{
 			unsigned int u = 0;
-			((char*)&u)[0] = _bytes[position+0];
-			((char*)&u)[1] = _bytes[position+1];
-			((char*)&u)[2] = _bytes[position+2];
-			((char*)&u)[3] = _bytes[position+3];
+			if (flipped)
+			{
+				((char*)&u)[0] = _bytes[position+3];
+				((char*)&u)[1] = _bytes[position+2];
+				((char*)&u)[2] = _bytes[position+1];
+				((char*)&u)[3] = _bytes[position+0];
+			}
+			else
+			{
+				((char*)&u)[0] = _bytes[position+0];
+				((char*)&u)[1] = _bytes[position+1];
+				((char*)&u)[2] = _bytes[position+2];
+				((char*)&u)[3] = _bytes[position+3];
+			}
 			position += sizeof(unsigned int);
 			return u;
 		}
@@ -535,10 +577,20 @@ namespace ww
 		if (position + sizeof(float) <= _length)
 		{
 			float f;
-			((char*)&f)[0] = _bytes[position + 0];
-			((char*)&f)[1] = _bytes[position + 1];
-			((char*)&f)[2] = _bytes[position + 2];
-			((char*)&f)[3] = _bytes[position + 3];
+			if (flipped)
+			{
+				((char*)&f)[0] = _bytes[position + 3];
+				((char*)&f)[1] = _bytes[position + 2];
+				((char*)&f)[2] = _bytes[position + 1];
+				((char*)&f)[3] = _bytes[position + 0];
+			}
+			else
+			{
+				((char*)&f)[0] = _bytes[position + 0];
+				((char*)&f)[1] = _bytes[position + 1];
+				((char*)&f)[2] = _bytes[position + 2];
+				((char*)&f)[3] = _bytes[position + 3];
+			}
 			position += sizeof(float);
 			return f;
 		}
@@ -593,14 +645,28 @@ namespace ww
 		if (position + sizeof(double) <= _length)
 		{
 			double d;
-			((char*)&d)[0] = _bytes[position];
-			((char*)&d)[1] = _bytes[position+1];
-			((char*)&d)[2] = _bytes[position+2];
-			((char*)&d)[3] = _bytes[position+3];
-			((char*)&d)[4] = _bytes[position+4];
-			((char*)&d)[5] = _bytes[position+5];
-			((char*)&d)[6] = _bytes[position+6];
-			((char*)&d)[7] = _bytes[position+7];
+			if (flipped)
+			{
+				((char*)&d)[0] = _bytes[position+7];
+				((char*)&d)[1] = _bytes[position+6];
+				((char*)&d)[2] = _bytes[position+5];
+				((char*)&d)[3] = _bytes[position+4];
+				((char*)&d)[4] = _bytes[position+3];
+				((char*)&d)[5] = _bytes[position+2];
+				((char*)&d)[6] = _bytes[position+1];
+				((char*)&d)[7] = _bytes[position+0];
+			}
+			else
+			{
+				((char*)&d)[0] = _bytes[position];
+				((char*)&d)[1] = _bytes[position+1];
+				((char*)&d)[2] = _bytes[position+2];
+				((char*)&d)[3] = _bytes[position+3];
+				((char*)&d)[4] = _bytes[position+4];
+				((char*)&d)[5] = _bytes[position+5];
+				((char*)&d)[6] = _bytes[position+6];
+				((char*)&d)[7] = _bytes[position+7];
+			}
 			position += sizeof(double);
 			return d;
 		}

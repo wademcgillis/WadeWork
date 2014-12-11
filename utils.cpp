@@ -12,6 +12,35 @@ namespace ww
 			return stbi_load(path,width,height,NULL,false);
 		}
 
+		char *file_alloc_contents(char *path)
+		{
+			// get contents of file
+			FILE *f = fopen(path,"rb");
+			if (f != NULL)
+			{
+				// if file loaded
+				char *contents = NULL;
+				int len;
+				// seek to end
+				fseek(f,0,SEEK_END);
+				// get length
+				len = ftell(f);
+				// seek to beginning
+				fseek(f,0,SEEK_SET);
+				// new char array
+				contents = new char[len+1];
+				// set to zero
+				memset(contents,0,len+1);
+				// read it
+				fread(contents, len, 1, f);
+				// close file
+				fclose(f);
+				return contents;
+			}
+			else
+				return NULL;
+		}
+
 		namespace random
 		{
 			inline unsigned int bitshiftWrapRight(unsigned int n, unsigned int shift)

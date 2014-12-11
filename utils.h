@@ -6,6 +6,8 @@ namespace ww
 	{
 		extern unsigned char *load_image(const char *path, int *width, int *height);
 
+		char *file_alloc_contents(char *path);
+
 		namespace random
 		{
 			extern void seed(unsigned int n);

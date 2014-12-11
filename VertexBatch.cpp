@@ -89,6 +89,11 @@ namespace ww
 			vertexCount = 0;
 			//glMapBufferOES(vertexbuffer, GL_WRITE_ONLY_OES);
 		}
+		void VertexBatch::pushsprite(Sprite *spr)
+		{
+			if (spr)
+				pushvertices(spr->vertices,6);
+		}
 		void VertexBatch::pushvertex(Vertex v)//float x, float y, float z, unsigned int color, float u, float v)
 		{
 			((Vertex*)vertices)[vertexCount] = v;//MakeVertex(x,y,z,color,u,-v);

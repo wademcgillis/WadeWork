@@ -498,7 +498,7 @@ namespace ww
 			{
 				return touches.size();
 			}
-			Wumbo::vec2di rawtouchLocation(unsigned int index)
+			ww::vec2di rawtouchLocation(unsigned int index)
 			{
 				if (index < touches.size())
 					return vec2di(fixTouchForOrientation([touches.at(index) locationInView:nil]).x,fixTouchForOrientation([touches.at(index) locationInView:nil]).y);

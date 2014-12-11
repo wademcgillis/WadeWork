@@ -7,6 +7,7 @@ namespace ww
 	class Buffer
 	{
 	private:
+		bool flipped;
 		unsigned char *_bytes;
 		unsigned int _arraySize;
 		long _length;
