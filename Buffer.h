@@ -30,6 +30,7 @@ namespace ww
 		long getlength();
 		void setbytes(char *bytes, unsigned int length);
 		
+		void readflippedbytes(bool flip);
 		void setmode(unsigned int mode);
 		unsigned int getmode();
 		

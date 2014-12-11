@@ -16,15 +16,19 @@ namespace ww
 {
 	namespace gfx
 	{
-		VertexBatch::VertexBatch(bool normals)
+		VertexBatch::VertexBatch(bool normals, unsigned int maxVertCount = , bool autoResizeVertices = false)
 		{
 			initialized = false;
 			usesNormals = normals;
+			maxVertexCount = 0x1fff;
+			autoResizeVertexArray = autoResizeVertices;
 		}
-		VertexBatch::VertexBatch()
+		VertexBatch::VertexBatch(unsigned int maxVertCount = 0x1fff, bool autoResizeVertices = false)
 		{
 			initialized = false;
 			usesNormals = false;
+			maxVertexCount = maxVertCount;
+			autoResizeVertexArray = autoResizeVertices;
 		}
 		void *VertexBatch::getVertices()
 		{
@@ -135,7 +139,7 @@ namespace ww
 			if (ww::gfx::supportsOpenGL2())
 			{
 				glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-				glBufferData(GL_ARRAY_BUFFER, VERT_SIZE*vertexCount, vertices, GL_DYNAMIC_DRAW);
+				glBufferSubData(GL_ARRAY_BUFFER, 0, VERT_SIZE*vertexCount, vertices);
 				glBindBuffer(GL_ARRAY_BUFFER, 0);
 			}
 		}

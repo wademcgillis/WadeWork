@@ -10,6 +10,8 @@ namespace ww
 		unsigned int window_width = 640;
 		unsigned int window_height = 480;
 
+		ww::Rectanglei renderSubrect;
+
 		RenderTarget *currentRenderTarget = NULL;
 		bool FORCE_GL1 = false;
 
@@ -65,11 +67,39 @@ namespace ww
 
 		void setWindowSize(unsigned int width, unsigned int height)
 		{
+#if PLATFORM_IOS
+			NSLog(@"Warning: setWindowSize is unavailable on mobile devices.");
+#else
 			window_width = width;
 			window_height = height;
 			if (window)
-			{
 				window->setSize(sf::Vector2u(window_width,window_width));
+#endif
+		}
+
+		ww::Rectanglei getRenderSubrect()
+		{
+			return renderSubrect;
+		}
+
+		void setRenderSubrect(ww::Rectanglei subrect)
+		{
+			renderSubrect = subrect;
+			if (currentRenderTarget != NULL)
+			{
+				glScissor(subrect.x,subrect.y,subrect.width,subrect.height);
+				glViewport(subrect.x,subrect.y,subrect.width,subrect.height);
+			}
+			else
+			{
+	#if PLATFORM_IOS
+				subrect.x *= (int)[UIScreen mainScreen].scale;
+				subrect.y *= (int)[UIScreen mainScreen].scale;
+				subrect.width *= (int)[UIScreen mainScreen].scale;
+				subrect.height *= (int)[UIScreen mainScreen].scale;
+	#endif
+				glScissor(subrect.x,window_height-(subrect.y+subrect.height),subrect.width,subrect.height);
+				glViewport(subrect.x,window_height-(subrect.y+subrect.height),subrect.width,subrect.height);
 			}
 		}
 

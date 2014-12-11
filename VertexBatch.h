@@ -9,8 +9,6 @@ namespace ww
 {
 	namespace gfx
 	{
-		const unsigned int MAX_VERTEXBATCH_TRIANGLE_COUNT = 0x1fff;
-
 		typedef struct
 		{
 			float x, y, z;
@@ -78,6 +76,8 @@ namespace ww
 			GLuint vertexBuffer;
 			GLuint vertexArray;
 			void *vertices;
+			bool autoResizeVertexArray;
+			unsigned int maxVertexCount;
 			unsigned int vertexCount;
 			bool usesNormals;
 			bool initialized;
@@ -90,8 +90,8 @@ namespace ww
 			static const unsigned int AttribNormal = 3;
 
 			bool loadOBJ(const char *fname);
-			VertexBatch(bool normals);
-			VertexBatch();
+			VertexBatch(bool normals, unsigned int maxVertCount = 0x1fff, bool autoResizeVertices = false);
+			VertexBatch(unsigned int maxVertCount = 0x1fff, bool autoResizeVertices = false);
 			~VertexBatch();
 			void pushsprite(Sprite *sprite);
 			void pushvertex(Vertex v);

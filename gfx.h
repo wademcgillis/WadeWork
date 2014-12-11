@@ -3,6 +3,7 @@
 #include <WadeWork/sys_defines.h>
 #include <WadeWork/opengl.h>
 
+#include <WadeWork/types.h>
 #include <WadeWork/RenderTarget.h>
 #include <WadeWork/Shader.h>
 namespace ww
@@ -23,6 +24,9 @@ namespace ww
 
 		extern void setFramerate(unsigned int rate);
 		extern unsigned int getFramerate();
+
+		extern ww::Rectanglei getRenderSubrect();
+		extern void setRenderSubrect(ww::Rectanglei subrect);
 
 		extern void resetRenderTarget();
 		extern void setRenderTarget(RenderTarget *target);
