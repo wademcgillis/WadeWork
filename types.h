@@ -14,6 +14,7 @@ namespace ww
 		vec2d(T x, T y);
 	};
 	typedef vec2d<int> vec2di;
+	typedef vec2d<unsigned int> vec2dui;
 	typedef vec2d<float> vec2df;
 
 	template <typename T>

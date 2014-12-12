@@ -1,6 +1,7 @@
 #ifndef __WadeWork__VertexBatch_h__
 #define __WadeWork__VertexBatch_h__
 #include <WadeWork/opengl.h>
+#include <WadeWork/Sprite.h>
 
 #define min(a,b) ((a) < (b)?(a):(b))
 #define max(a,b) ((a) > (b)?(a):(b))
@@ -9,66 +10,6 @@ namespace ww
 {
 	namespace gfx
 	{
-		typedef struct
-		{
-			float x, y, z;
-			unsigned int color;
-			float u, v;
-		} Vertex;
-		inline Vertex MakeVertex(float x, float y, float z, unsigned int color, float u, float v)
-		{
-			Vertex vert;
-			vert.x = x;
-			vert.y = y;
-			vert.z = z;
-			vert.color = color;
-			vert.u = u;
-			vert.v = v;
-			return vert;
-		}
-		typedef struct
-		{
-			float x, y, z;
-			unsigned int color;
-			float u, v;
-			float nx, ny, nz;
-		} NVertex;
-		inline NVertex MakeNVertex(float x, float y, float z, unsigned int color, float u, float v, float nx, float ny, float nz)
-		{
-			NVertex nvert;
-			nvert.x = x;
-			nvert.y = y;
-			nvert.z = z;
-			nvert.color = color;
-			nvert.u = u;
-			nvert.v = v;
-			nvert.nx = nx;
-			nvert.ny = ny;
-			nvert.nz = nz;
-			return nvert;
-		}
-
-		typedef struct
-		{
-			ww::gfx::Vertex vertices[6]; // wow
-		} Sprite;
-
-		inline Sprite makeSprite(float x, float y, float width, float height, float u, float v, float w, float h)
-		{
-			float L = min(u,u+w);
-			float R = max(u,u+w);
-			float T = min(v,v+h);
-			float B = max(v,v+h);
-			Sprite spr;
-			spr.vertices[0] = ww::gfx::MakeVertex(x+width,y+height,0,0xFFFFFFFF,R,B);
-			spr.vertices[1] = ww::gfx::MakeVertex(x+width,y,0,0xFFFFFFFF,R,T);
-			spr.vertices[2] = ww::gfx::MakeVertex(x,y,0,0xFFFFFFFF,L,T);
-			spr.vertices[3] = ww::gfx::MakeVertex(x+width,y+height,0,0xFFFFFFFF,R,B);
-			spr.vertices[4] = ww::gfx::MakeVertex(x,y,0,0xFFFFFFFF,L,T);
-			spr.vertices[5] = ww::gfx::MakeVertex(x,y+height,0,0xFFFFFFFF,L,B);
-			return spr;
-		}
-
 		class VertexBatch
 		{
 		private:
@@ -90,10 +31,12 @@ namespace ww
 			static const unsigned int AttribNormal = 3;
 
 			bool loadOBJ(const char *fname);
-			VertexBatch(bool normals, unsigned int maxVertCount = 0x1fff, bool autoResizeVertices = false);
-			VertexBatch(unsigned int maxVertCount = 0x1fff, bool autoResizeVertices = false);
+			VertexBatch(bool normals, unsigned int maxVertCount, bool autoResizeVertices);
+			VertexBatch(bool normals, unsigned int maxVertCount);
+			VertexBatch(bool normals);
+			VertexBatch();
 			~VertexBatch();
-			void pushsprite(Sprite *sprite);
+			void pushsprite(ww::gfx::Sprite *sprite, unsigned int subimage = 0);
 			void pushvertex(Vertex v);
 			void pushvertices(Vertex *vs, unsigned int number);
 			void pushnvertex(NVertex nv);

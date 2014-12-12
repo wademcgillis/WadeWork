@@ -35,6 +35,45 @@ namespace ww
 		extern void display();
 
 		extern void setMatrix(ww::gfx::Shader *shader, GLint uniform, const GLfloat *matrix);
+
+		typedef struct
+		{
+			float x, y, z;
+			unsigned int color;
+			float u, v;
+		} Vertex;
+		inline Vertex MakeVertex(float x, float y, float z, unsigned int color, float u, float v)
+		{
+			Vertex vert;
+			vert.x = x;
+			vert.y = y;
+			vert.z = z;
+			vert.color = color;
+			vert.u = u;
+			vert.v = v;
+			return vert;
+		}
+		typedef struct
+		{
+			float x, y, z;
+			unsigned int color;
+			float u, v;
+			float nx, ny, nz;
+		} NVertex;
+		inline NVertex MakeNVertex(float x, float y, float z, unsigned int color, float u, float v, float nx, float ny, float nz)
+		{
+			NVertex nvert;
+			nvert.x = x;
+			nvert.y = y;
+			nvert.z = z;
+			nvert.color = color;
+			nvert.u = u;
+			nvert.v = v;
+			nvert.nx = nx;
+			nvert.ny = ny;
+			nvert.nz = nz;
+			return nvert;
+		}
 	};
 };
 

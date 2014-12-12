@@ -16,19 +16,35 @@ namespace ww
 {
 	namespace gfx
 	{
-		VertexBatch::VertexBatch(bool normals, unsigned int maxVertCount = , bool autoResizeVertices = false)
+		const unsigned int DEFAULT_VERTEXBATCH_TRIANGLE_COUNT = 0x1fff;
+
+		VertexBatch::VertexBatch(bool normals, unsigned int maxVertCount, bool autoResizeVertices)
 		{
 			initialized = false;
 			usesNormals = normals;
-			maxVertexCount = 0x1fff;
+			maxVertexCount = maxVertCount;
 			autoResizeVertexArray = autoResizeVertices;
 		}
-		VertexBatch::VertexBatch(unsigned int maxVertCount = 0x1fff, bool autoResizeVertices = false)
+		VertexBatch::VertexBatch(bool normals, unsigned int maxVertCount)
+		{
+			initialized = false;
+			usesNormals = normals;
+			maxVertexCount = maxVertCount;
+			autoResizeVertexArray = false;
+		}
+		VertexBatch::VertexBatch(bool normals)
+		{
+			initialized = false;
+			usesNormals = normals;
+			maxVertexCount = DEFAULT_VERTEXBATCH_TRIANGLE_COUNT;
+			autoResizeVertexArray = false;
+		}
+		VertexBatch::VertexBatch()
 		{
 			initialized = false;
 			usesNormals = false;
-			maxVertexCount = maxVertCount;
-			autoResizeVertexArray = autoResizeVertices;
+			maxVertexCount = DEFAULT_VERTEXBATCH_TRIANGLE_COUNT;
+			autoResizeVertexArray = false;
 		}
 		void *VertexBatch::getVertices()
 		{
@@ -52,19 +68,19 @@ namespace ww
 			if (usesNormals)
 			{
 				VERT_SIZE = sizeof(NVertex);
-				vertices = new NVertex[MAX_VERTEXBATCH_TRIANGLE_COUNT * 3];
-				memset(vertices,0,VERT_SIZE * MAX_VERTEXBATCH_TRIANGLE_COUNT * 3);
+				vertices = new NVertex[maxVertexCount * 3];
+				memset(vertices,0,VERT_SIZE * maxVertexCount * 3);
 			}
 			else
 			{
 				VERT_SIZE = sizeof(Vertex);
-				vertices = new Vertex[MAX_VERTEXBATCH_TRIANGLE_COUNT * 3];
-				memset(vertices,0,VERT_SIZE * MAX_VERTEXBATCH_TRIANGLE_COUNT * 3);
+				vertices = new Vertex[maxVertexCount * 3];
+				memset(vertices,0,VERT_SIZE * maxVertexCount * 3);
 			}
 
 			//printf("vert size = %u\n",VERT_SIZE);
 
-			vertexCount = 3*ww::gfx::MAX_VERTEXBATCH_TRIANGLE_COUNT;
+			vertexCount = 3*maxVertexCount;
 
 			if (ww::gfx::supportsOpenGL2())
 			{
@@ -93,10 +109,10 @@ namespace ww
 			vertexCount = 0;
 			//glMapBufferOES(vertexbuffer, GL_WRITE_ONLY_OES);
 		}
-		void VertexBatch::pushsprite(Sprite *spr)
+		void VertexBatch::pushsprite(Sprite *spr, unsigned int subimage)
 		{
 			if (spr)
-				pushvertices(spr->vertices,6);
+				pushvertices(spr->getSubimageVertices(subimage),6);
 		}
 		void VertexBatch::pushvertex(Vertex v)//float x, float y, float z, unsigned int color, float u, float v)
 		{
