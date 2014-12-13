@@ -21,6 +21,7 @@ namespace ww
 			ww::vec2dui getSize();
 
 			void setSubimageUVRect(unsigned int subimage, float u, float v, float w, float h);
+			void setSubimageUVRect(unsigned int subimage, ww::Rectanglef rect);
 			ww::Rectanglef getSubimageUVRect(unsigned int subimage);
 
 			ww::vec2df getPosition();
@@ -33,6 +34,10 @@ namespace ww
 			
 			unsigned int getColor();
 			void setColor(unsigned int color);
+
+			virtual void setFlipX(bool a) {}
+			virtual void setFlipY(bool a) {}
+			virtual void setScale(float s, float s2) {}
 		};
 	}
 }

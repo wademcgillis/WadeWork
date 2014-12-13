@@ -10,6 +10,8 @@ namespace ww
 {
 	namespace gfx
 	{
+		class Sprite;
+
 		class VertexBatch
 		{
 		private:
@@ -31,19 +33,25 @@ namespace ww
 			static const unsigned int AttribNormal = 3;
 
 			bool loadOBJ(const char *fname);
+
 			VertexBatch(bool normals, unsigned int maxVertCount, bool autoResizeVertices);
 			VertexBatch(bool normals, unsigned int maxVertCount);
 			VertexBatch(bool normals);
 			VertexBatch();
 			~VertexBatch();
-			void pushsprite(ww::gfx::Sprite *sprite, unsigned int subimage = 0);
+
+			void pushsprite(Sprite *sprite, unsigned int subimage = 0);
 			void pushvertex(Vertex v);
 			void pushvertices(Vertex *vs, unsigned int number);
+
 			void pushnvertex(NVertex nv);
 			void pushnvertices(NVertex *nvs, unsigned int number);
+
 			void *getVertices();
 			unsigned int getVertexCount();
+
 			bool hasNormals();
+
 			void clear();
 			void update();
 			void draw(unsigned int vertexType = GL_TRIANGLES);

@@ -48,6 +48,10 @@ namespace ww
 			return ww::vec2dui(internalWidth,internalHeight);
 		}
 
+		void Sprite::setSubimageUVRect(unsigned int subimage, ww::Rectanglef rect)
+		{
+			setSubimageUVRect(subimage,rect.x,rect.y,rect.width,rect.height);
+		}
 		void Sprite::setSubimageUVRect(unsigned int subimage, float u, float v, float w, float h)
 		{
 			if (subimage >= subimageCount)
@@ -110,13 +114,13 @@ namespace ww
 			internalWidth -= 1;
 			internalX -= 1.f;
 			internalColor = color-1;
+			// replace the array
+			delete vertices;
+			vertices = newVertices;
 			// now call the change functions so all the new vertices get updated too!
 			setSize(w,h);
 			setColor(color);
 			setPosition(x,y);
-			// replace the array
-			delete vertices;
-			vertices = newVertices;
 		}
 		unsigned int Sprite::getSubimageCount()
 		{
@@ -159,7 +163,25 @@ namespace ww
 		{
 			if (subimage >= subimageCount)
 				return NULL;
-			return vertices + 6*subimage*sizeof(ww::gfx::Vertex);
+			/*vertices[6*subimage+0].x = internalX+internalWidth;
+			vertices[6*subimage+0].y = internalY+internalHeight;
+
+			vertices[6*subimage+1].x = internalX+internalWidth;
+			vertices[6*subimage+1].y = internalY;
+
+			vertices[6*subimage+2].x = internalX;
+			vertices[6*subimage+2].y = internalY;
+
+			vertices[6*subimage+3].x = internalX+internalWidth;
+			vertices[6*subimage+3].y = internalY+internalHeight;
+
+			vertices[6*subimage+4].x = internalX;
+			vertices[6*subimage+4].y = internalY;
+
+			vertices[6*subimage+5].x = internalX;
+			vertices[6*subimage+5].y = internalY+internalHeight;*/
+
+			return &vertices[6*subimage];// + 6*subimage*sizeof(ww::gfx::Vertex);
 		}
 		
 		void Sprite::setColor(unsigned int color)
@@ -167,7 +189,7 @@ namespace ww
 			if (color != internalColor)
 			{
 				internalColor = color;
-				for(int i=0;i<subimageCount;i++)
+				for(int i=0;i<6*subimageCount;i++)
 					vertices[i].color = internalColor;
 			}
 		}

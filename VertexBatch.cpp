@@ -7,6 +7,7 @@
 //
 #include <WadeWork/VertexBatch.h>
 #include <WadeWork/gfx.h>
+#include <WadeWork/Sprite.h>
 #if PLATFORM_PC
 #define fmin(a,b) (a)<(b)?(a):(b)
 #define fmax(a,b) (a)>(b)?(a):(b)
@@ -176,6 +177,7 @@ namespace ww
 		{
 			if (vertexCount == 0)
 				return;
+			printf("Drawing %i triangles\n",vertexCount/3);
 			if (ww::gfx::supportsOpenGL2())
 			{
 				if (dirty)

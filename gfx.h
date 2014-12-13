@@ -77,7 +77,7 @@ namespace ww
 	};
 };
 
-
+#include <WadeWork/Sprite.h>
 #include <WadeWork/VertexBatch.h>
 #include <WadeWork/Texture.h>
 #include <WadeWork/ShaderBuilder.h>
