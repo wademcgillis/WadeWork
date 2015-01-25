@@ -209,6 +209,8 @@ namespace ww
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, imageData);
 			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 #if PLATFORM_IOS
 			CGContextRelease(context);
 #endif
@@ -244,7 +246,23 @@ namespace ww
 				}
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_BGRA, GL_UNSIGNED_BYTE, dataPtr);
 		}
-				
+		
+		void Texture::setRGBRect(GLuint x1, GLuint y1, GLuint x2, GLuint y2, unsigned int color)
+		{
+			if (x2 < 0)
+				return;
+			if (y2 < 0)
+				return;
+			if (x1 >= width)
+				return;
+			if (y1 >= height)
+				return;
+			for(int x=x1;x<x2;x++)
+				for(int y=y1;y<y2;y++)
+					dataPtr[POS] = color;
+
+		}
+
 		void Texture::setRGBPixel(GLuint x, GLuint y, unsigned int color)
 		{
 			if (dataPtr == NULL)

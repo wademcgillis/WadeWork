@@ -2,6 +2,7 @@
 
 namespace ww
 {
+	// VEC 2D
 	template <typename T>
 	inline vec2d<T>::vec2d() : x(0), y(0)
 	{
@@ -13,7 +14,7 @@ namespace ww
 	{
 
 	}
-
+	// VEC 3D
 	template <typename T>
 	inline vec3d<T>::vec3d() : x(0), y(0), z(0)
 	{
@@ -25,7 +26,19 @@ namespace ww
 	{
 
 	}
+	// VEC 4D
+	template <typename T>
+	inline vec4d<T>::vec4d() : x(0), y(0), z(0), w(0)
+	{
 
+	}
+
+	template <typename T>
+	inline vec4d<T>::vec4d(T X, T Y, T Z, T W) : x(X), y(Y), z(Z), w(W)
+	{
+
+	}
+	// RECT
 	template <typename T>
 	inline Rectangle<T>::Rectangle() : x(0), y(0), width(0), height(0), xoffset(0), yoffset(0)
 	{

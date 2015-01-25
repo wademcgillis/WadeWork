@@ -10,10 +10,12 @@ namespace ww
 		unsigned int window_width = 640;
 		unsigned int window_height = 480;
 
-		ww::Rectanglei renderSubrect;
+		ww::gfx::RenderSubrect renderSubrect;
 
 		RenderTarget *currentRenderTarget = NULL;
 		bool FORCE_GL1 = false;
+
+		GLfloat *savedMatrix;
 
 #if PLATFORM_IOS
 		extern void glBindFramebuffer0();
@@ -77,12 +79,12 @@ namespace ww
 #endif
 		}
 
-		ww::Rectanglei getRenderSubrect()
+		ww::gfx::RenderSubrect getRenderSubrect()
 		{
 			return renderSubrect;
 		}
 
-		void setRenderSubrect(ww::Rectanglei subrect)
+		void setRenderSubrect(ww::gfx::RenderSubrect subrect)
 		{
 			renderSubrect = subrect;
 			if (currentRenderTarget != NULL)
@@ -161,12 +163,16 @@ namespace ww
 
 		void setMatrix(ww::gfx::Shader *shader, GLint uniform, const GLfloat *matrix)
 		{
+			savedMatrix = (GLfloat*)matrix;
 			if (shader == NULL)
-			{
-				glLoadMatrixf(matrix);
-			}
+				glLoadMatrixf(savedMatrix);
 			else
-				shader->setMatrix(uniform,matrix);
+				shader->setMatrix(uniform,savedMatrix);
+		}
+
+		GLfloat *getMatrix()
+		{
+			return savedMatrix;
 		}
 	};
 };

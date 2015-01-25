@@ -17,6 +17,7 @@ namespace ww
 	typedef vec2d<unsigned int> vec2dui;
 	typedef vec2d<float> vec2df;
 
+
 	template <typename T>
 	class vec3d
 	{
@@ -32,6 +33,21 @@ namespace ww
 	typedef vec3d<int> vec3di;
 	typedef vec3d<float> vec3df;
 
+	template <typename T>
+	class vec4d
+	{
+	public:
+		T x;
+		T y;
+		T z;
+		T w;
+
+		vec4d();
+
+		vec4d(T x, T y, T z, T w);
+	};
+	typedef vec4d<int> vec4di;
+	typedef vec4d<float> vec4df;
 
 
 	template <typename T>

@@ -177,7 +177,7 @@ namespace ww
 		{
 			if (vertexCount == 0)
 				return;
-			printf("Drawing %i triangles\n",vertexCount/3);
+			//printf("Drawing %i triangles\n",vertexCount/3);
 			if (ww::gfx::supportsOpenGL2())
 			{
 				if (dirty)

@@ -163,9 +163,11 @@ namespace ww
 			glEnable(GL_TEXTURE_2D);
 			glEnable(GL_BLEND);
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);//glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);//_MINUS_SRC_ALPHA);GL_SRC_ALPHA,GL_DST_ALPHA,GL_ONE,GL_ONE);//
+			glEnable(GL_ALPHA_TEST);
+			glAlphaFunc(GL_GREATER,.01f);
 			//glBlendFunc(GL_SRC_ALPHA, GL_DST_ALPHA);//GL_ONE_MINUS_SRC_ALPHA);
-			glDisable(GL_CULL_FACE);
-			//glFrontFace(GL_CCW);
+			glEnable(GL_CULL_FACE);
+			glFrontFace(GL_CCW);
 
 			if (~CONFIG & ww::sys::CONFIG_DISABLE_OPENGL_DEPTHBUFFER)
 			{

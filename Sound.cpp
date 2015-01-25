@@ -115,7 +115,8 @@ namespace ww
 		}
 		void Sound::play()
 		{
-			printf("play\n");
+			return;
+			//printf("play\n");
 			// set looping to false and play the sound
 			alSourcei(source, AL_LOOPING, AL_FALSE);
 			alSourcePlay(source);
@@ -128,6 +129,7 @@ namespace ww
 		}
 		void Sound::loop()
 		{
+			return;
 			// set looping to true and play the sound
 			alSourcei(source, AL_LOOPING, AL_FALSE);
 			alSourcePlay(source);

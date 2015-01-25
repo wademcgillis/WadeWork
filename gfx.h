@@ -10,6 +10,38 @@ namespace ww
 {
 	namespace gfx
 	{
+		typedef struct
+		{
+			int x;
+			int y;
+			int width;
+			int height;
+			int internalwidth;
+			int internalheight;
+		} RenderSubrect;
+		inline RenderSubrect MakeRenderSubrect(int x, int y, int width, int height)
+		{
+			RenderSubrect sub;
+			sub.x = x;
+			sub.y = y;
+			sub.width = width;
+			sub.height = height;
+			sub.internalwidth = width;
+			sub.internalheight = height;
+			return sub;
+		}
+		inline RenderSubrect MakeRenderSubrect(int x, int y, int width, int height, int internalwidth, int internalheight)
+		{
+			RenderSubrect sub;
+			sub.x = x;
+			sub.y = y;
+			sub.width = width;
+			sub.height = height;
+			sub.internalwidth = internalwidth;
+			sub.internalheight = internalheight;
+			return sub;
+		}
+
 		const unsigned int BM_NORMAL = 0;
 		const unsigned int BM_ADD = 1;
 		const unsigned int BM_SUBTRACT = 2;
@@ -25,8 +57,8 @@ namespace ww
 		extern void setFramerate(unsigned int rate);
 		extern unsigned int getFramerate();
 
-		extern ww::Rectanglei getRenderSubrect();
-		extern void setRenderSubrect(ww::Rectanglei subrect);
+		extern ww::gfx::RenderSubrect getRenderSubrect();
+		extern void setRenderSubrect(ww::gfx::RenderSubrect subrect);
 
 		extern void resetRenderTarget();
 		extern void setRenderTarget(RenderTarget *target);
@@ -35,6 +67,7 @@ namespace ww
 		extern void display();
 
 		extern void setMatrix(ww::gfx::Shader *shader, GLint uniform, const GLfloat *matrix);
+		extern GLfloat *getMatrix();
 
 		typedef struct
 		{
