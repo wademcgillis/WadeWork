@@ -1,5 +1,6 @@
 #include <WadeWork/Sound.h>
-#include <WadeWork/ext/stb_vorbis/stb_vorbis.h>
+#define STB_VORBIS_HEADER_ONLY
+#include <WadeWork/ext/stb_vorbis/stb_vorbis.c>
 #include <map>
 namespace ww
 {

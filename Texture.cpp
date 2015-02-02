@@ -25,6 +25,7 @@ namespace ww
 
 		Texture::Texture(GLuint texID, unsigned int width, unsigned int height)
 		{
+			notMyPointer = false;
 			dataPtr = NULL;
 			width = width;
 			height = height;
@@ -34,6 +35,7 @@ namespace ww
 		}
 		Texture::Texture()
 		{
+			notMyPointer = false;
 			dataPtr = NULL;
 			loadType = 0;
 			textureLoaded = false;
@@ -58,8 +60,16 @@ namespace ww
 		
 		Texture::Texture(std::string fname)
 		{
+			notMyPointer = false;
 			textureLoaded = false;
 			load(fname);
+		}
+
+		Texture::~Texture()
+		{
+			unload();
+			if (!notMyPointer)
+				delete dataPtr;
 		}
 		
 		void Texture::setLinearInterpolation(bool linear)
@@ -96,7 +106,10 @@ namespace ww
 			apparentWidth = width;
 			apparentHeight = height;
 			if (forceData)
+			{
 				dataPtr = source;
+				notMyPointer = true;
+			}
 			else
 				dataPtr = new unsigned int[width*height];
 			

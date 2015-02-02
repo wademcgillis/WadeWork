@@ -8,6 +8,7 @@ namespace ww
 		class Texture
 		{
 		private:
+			bool notMyPointer;
 			static GLuint sharedBoundTexture;
 			unsigned int *dataPtr;
 			GLuint texture;
@@ -26,6 +27,7 @@ namespace ww
 #endif	
 		public:
 			Texture();
+			~Texture();
 			Texture(std::string fname);
 			
 			bool load(std::string fname);
