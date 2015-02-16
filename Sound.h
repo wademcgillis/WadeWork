@@ -14,7 +14,7 @@ namespace ww
 			bool _looping;
 			ALuint source;
 		public:
-			void gen(const char *data, unsigned int count, unsigned int rate);
+			void gen(void *data, unsigned int count, unsigned int rate, bool SixteenBit = false);
 			bool load(const char *path);
 			void play();
 			bool isPlaying();

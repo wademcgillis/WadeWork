@@ -67,11 +67,11 @@ namespace ww
 			}
 		};
 
-		void Sound::gen(const char *data, unsigned int count, unsigned int rate)
+		void Sound::gen(void *data, unsigned int count, unsigned int rate, bool SixteenBit)
 		{
 			ALuint buffer;
 			alGenBuffers((ALuint)1, &buffer);
-			alBufferData(buffer, AL_FORMAT_MONO8, data, count, rate);
+			alBufferData(buffer, (SixteenBit)?AL_FORMAT_MONO16:AL_FORMAT_MONO8, data, count, rate);
 			alGenSources((ALuint)1, &source);
 			alSourcef(source, AL_PITCH, 1.f);
 			alSourcef(source, AL_GAIN, 3.f);
