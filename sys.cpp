@@ -1,3 +1,4 @@
+#include <WadeWork/sys_defines.h>
 #if PLATFORM_WINDOWS
 #include <GL/glew.h>
 #include <windows.h>
@@ -14,7 +15,6 @@
 #include <windows.h>
 #include <mmsystem.h>
 #include <SFML/OpenGL.hpp>
-#include <winsock2.h>
 #ifdef DEBUG
 #pragma comment(lib,"sfml-system-s-d.lib")
 #pragma comment(lib,"sfml-window-s-d.lib")

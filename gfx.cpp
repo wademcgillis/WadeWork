@@ -24,6 +24,7 @@ namespace ww
 
 		bool supportsOpenGL2()
 		{
+			return false;
 			static bool set = false;
 			static bool GL2 = false;
 			if (!set)

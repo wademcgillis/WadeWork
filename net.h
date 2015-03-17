@@ -14,12 +14,14 @@
 //#include <CFNetwork/CFNetwork.h>
 //#include <SystemConfigu
 #else
-//#include <winsock.h>
-#include <windows.h>
+//#undef _WINSOCK2API_
+//#include <winsock2.h>
 #include <WS2tcpip.h>
+//#include <windows.h>
+
 #endif
-#include <WadeWork/TCP.h>
-#include <WadeWork/UDP.h>
+//#include <WadeWork/Tcp.h>
+//#include <WadeWork/Udp.h>
 #include <vector>
 namespace ww
 {

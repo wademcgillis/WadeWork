@@ -3,6 +3,11 @@
 #include <WadeWork/ext/stb_image/stb_image.h>
 #endif
 
+/*extern "C"
+{
+unsigned char *stbi_load(char const *filename, int *x, int *y, int *comp, int req_comp);
+}*/
+
 namespace ww
 {
 	namespace gfx
@@ -150,14 +155,14 @@ namespace ww
 			if (data == nil)
 			{
 				texture = 0;
-				NSLog(@"GLtexture::load() could not find file at: %@", path);
+				NSLog(@"ww::gfx::Texture::load() could not find file at: %@", path);
 				NSLog([[NSBundle mainBundle] resourcePath]);
 				printf("%s\n", [[err description] UTF8String]);
 				return false;
 			}    
 			UIImage *uimg = [UIImage imageWithData:data];
 			CGImageRef image = [uimg CGImage];
-			NSLog(@"GLtexture::load() success: %@. Dimensions: %i, %i",path,(int)CGImageGetWidth(image),(int)CGImageGetHeight(image));
+			NSLog(@"ww::gfx::Texture::load() success: %@. Dimensions: %i, %i",path,(int)CGImageGetWidth(image),(int)CGImageGetHeight(image));
 			width = CGImageGetWidth(image);
 			height = CGImageGetHeight(image);
 			apparentWidth = width;
@@ -257,10 +262,10 @@ namespace ww
 					else
 						dataPtr[width*j + i] = 0x00000000;
 				}
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_BGRA, GL_UNSIGNED_BYTE, dataPtr);
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, dataPtr);
 		}
 		
-		void Texture::setRGBRect(GLuint x1, GLuint y1, GLuint x2, GLuint y2, unsigned int color)
+		void Texture::setRect(GLuint x1, GLuint y1, GLuint x2, GLuint y2, unsigned int color)
 		{
 			if (x2 < 0)
 				return;
@@ -276,19 +281,19 @@ namespace ww
 
 		}
 
-		void Texture::setRGBPixel(GLuint x, GLuint y, unsigned int color)
+		void Texture::setPixel(GLuint x, GLuint y, unsigned int color)
 		{
 			if (dataPtr == NULL)
 				return;
 			dataPtr[POS] = color;
 		}
-		void Texture::setBGRPixel(GLuint x, GLuint y, unsigned int color)
+		void Texture::setSwappedPixel(GLuint x, GLuint y, unsigned int color)
 		{
 			if (dataPtr == NULL)
 				return;
 			dataPtr[POS] = (((color >> 24) & 0xFF) << 24) | (((color >> 16) & 0xFF)) | (((color >> 8) & 0xFF) << 8) | ((color & 0xFF) << 16);
 		}
-		unsigned int Texture::getBGRPixel(GLuint x, GLuint y)
+		unsigned int Texture::getSwappedPixel(GLuint x, GLuint y)
 		{
 			if (dataPtr == NULL)
 				return 0x00000000;

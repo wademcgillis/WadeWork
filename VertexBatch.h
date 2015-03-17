@@ -20,7 +20,7 @@ namespace ww
 			GLuint vertexArray;
 			void *vertices;
 			bool autoResizeVertexArray;
-			unsigned int maxVertexCount;
+			unsigned int maxTriangleCount;
 			unsigned int vertexCount;
 			bool usesNormals;
 			bool initialized;
@@ -54,7 +54,7 @@ namespace ww
 
 			void clear();
 			void update();
-			void draw(unsigned int vertexType = GL_TRIANGLES);
+			void draw(unsigned int vertexType = GL_TRIANGLES, int first = -1, int count = -1);
 
 			void markAsDirty();
 

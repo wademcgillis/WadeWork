@@ -17,34 +17,34 @@ namespace ww
 {
 	namespace gfx
 	{
-		const unsigned int DEFAULT_VERTEXBATCH_TRIANGLE_COUNT = 0x1fff;
+		const unsigned int DEFAULT_VERTEXBATCH_TRIANGLE_COUNT = 0x1ffff;
 
 		VertexBatch::VertexBatch(bool normals, unsigned int maxVertCount, bool autoResizeVertices)
 		{
 			initialized = false;
 			usesNormals = normals;
-			maxVertexCount = maxVertCount;
+			maxTriangleCount = maxVertCount;
 			autoResizeVertexArray = autoResizeVertices;
 		}
 		VertexBatch::VertexBatch(bool normals, unsigned int maxVertCount)
 		{
 			initialized = false;
 			usesNormals = normals;
-			maxVertexCount = maxVertCount;
+			maxTriangleCount = maxVertCount;
 			autoResizeVertexArray = false;
 		}
 		VertexBatch::VertexBatch(bool normals)
 		{
 			initialized = false;
 			usesNormals = normals;
-			maxVertexCount = DEFAULT_VERTEXBATCH_TRIANGLE_COUNT;
+			maxTriangleCount = DEFAULT_VERTEXBATCH_TRIANGLE_COUNT;
 			autoResizeVertexArray = false;
 		}
 		VertexBatch::VertexBatch()
 		{
 			initialized = false;
 			usesNormals = false;
-			maxVertexCount = DEFAULT_VERTEXBATCH_TRIANGLE_COUNT;
+			maxTriangleCount = DEFAULT_VERTEXBATCH_TRIANGLE_COUNT;
 			autoResizeVertexArray = false;
 		}
 		void *VertexBatch::getVertices()
@@ -69,19 +69,19 @@ namespace ww
 			if (usesNormals)
 			{
 				VERT_SIZE = sizeof(NVertex);
-				vertices = new NVertex[maxVertexCount * 3];
-				memset(vertices,0,VERT_SIZE * maxVertexCount * 3);
+				vertices = new NVertex[maxTriangleCount * 3];
+				memset(vertices,0,VERT_SIZE * maxTriangleCount * 3);
 			}
 			else
 			{
 				VERT_SIZE = sizeof(Vertex);
-				vertices = new Vertex[maxVertexCount * 3];
-				memset(vertices,0,VERT_SIZE * maxVertexCount * 3);
+				vertices = new Vertex[maxTriangleCount * 3];
+				memset(vertices,0,VERT_SIZE * maxTriangleCount * 3);
 			}
 
 			//printf("vert size = %u\n",VERT_SIZE);
 
-			vertexCount = 3*maxVertexCount;
+			vertexCount = 3*maxTriangleCount;
 
 			if (ww::gfx::supportsOpenGL2())
 			{
@@ -173,11 +173,17 @@ namespace ww
 		{
 			dirty = true;
 		}
-		void VertexBatch::draw(unsigned int vertexType)
+		void VertexBatch::draw(unsigned int vertexType, int first, int count)
 		{
 			if (vertexCount == 0)
 				return;
-			//printf("Drawing %i triangles\n",vertexCount/3);
+			if (first < 0)
+				first = 0;
+			if (count < 0)
+				count = vertexCount;
+			if (count == 0)
+				return;
+			printf("Drawing %i triangles\n",vertexCount/3);
 			if (ww::gfx::supportsOpenGL2())
 			{
 				if (dirty)
@@ -186,7 +192,7 @@ namespace ww
 					update();
 				}
 				glBindVertexArray(vertexArray);
-				glDrawArrays(vertexType, 0, vertexCount);
+				glDrawArrays(vertexType, first, count);
 				glBindVertexArray(0);
 			}
 			else
@@ -197,7 +203,7 @@ namespace ww
 				glTexCoordPointer(2, GL_FLOAT, VERT_SIZE, ((char*)vertices) + 16);
 				if (usesNormals)
 					glNormalPointer(GL_FLOAT, VERT_SIZE, ((char*)vertices) + 24);
-				glDrawArrays(vertexType,0,vertexCount);
+				glDrawArrays(vertexType,first,count);
 	#endif
 			}
 		}
@@ -232,16 +238,16 @@ namespace ww
 				return false;
 			printf("Model %s opened successfully!\n",fname);
 			char line[1024];
-			OBJXYZ VERT[1024];
+			OBJXYZ VERT[2048];
 			unsigned int VERT_COUNT = 0;
-			OBJUV TEX[1024];
+			OBJUV TEX[2048];
 			unsigned int TEX_COUNT = 0;
-			OBJFACE FACE[1024];
+			OBJFACE FACE[2048];
 			unsigned int FACE_COUNT = 0;
 			while(!feof(f))
 			{
 				fgets(line,1023,f);
-				printf("NEW LINE: %s",line);
+				//printf("NEW LINE: %s",line);
 				if (feof(f))
 					break;
 				char *tok = strtok(line," ");
@@ -258,17 +264,17 @@ namespace ww
 				}
 				if (strcmp(tok,"vt") == 0)
 				{
-					printf("\tWE GOT A TEXCOORD!");
+					//printf("\tWE GOT A TEXCOORD!");
 					OBJUV tex;
 					tex.u = atof(strtok(NULL," "));
 					tex.v = 1.f-atof(strtok(NULL," "));
-					printf("\t%f %f\n",tex.u,tex.v);
+					//printf("\t%f %f\n",tex.u,tex.v);
 					TEX_COUNT++;
 					TEX[TEX_COUNT] = tex;
 				}
 				if (strcmp(tok,"f") == 0)
 				{
-					printf("\tWE GOT A FACE!");
+					//printf("\tWE GOT A FACE!");
 					char *f1 = strtok(NULL," ");
 					char *f2 = strtok(NULL," ");
 					char *f3 = strtok(NULL," ");
@@ -283,7 +289,7 @@ namespace ww
 					face.V3 = atoi(strtok(f3,"/"));
 					face.T3 = atoi(strtok(NULL,"/"));
 
-					printf("\t%i/%i %i/%i %i/%i\n",face.V1,face.T1,face.V2,face.T2,face.V3,face.T3);
+					//printf("\t%i/%i %i/%i %i/%i\n",face.V1,face.T1,face.V2,face.T2,face.V3,face.T3);
 					FACE_COUNT++;
 					FACE[FACE_COUNT] = face;
 				}
@@ -295,8 +301,8 @@ namespace ww
 			{
 				C = 0xFFFFFFFF;//0xFF000000 | (rand()%255)<<16 | (rand()%255)<<8 | (rand()%255)<<0;
 				this->pushvertex(ww::gfx::MakeVertex(VERT[FACE[i].V1].x,VERT[FACE[i].V1].y,VERT[FACE[i].V1].z,C,TEX[FACE[i].T1].u,TEX[FACE[i].T1].v));
-				this->pushvertex(ww::gfx::MakeVertex(VERT[FACE[i].V2].x,VERT[FACE[i].V2].y,VERT[FACE[i].V2].z,C,TEX[FACE[i].T2].u,TEX[FACE[i].T2].v));
 				this->pushvertex(ww::gfx::MakeVertex(VERT[FACE[i].V3].x,VERT[FACE[i].V3].y,VERT[FACE[i].V3].z,C,TEX[FACE[i].T3].u,TEX[FACE[i].T3].v));
+				this->pushvertex(ww::gfx::MakeVertex(VERT[FACE[i].V2].x,VERT[FACE[i].V2].y,VERT[FACE[i].V2].z,C,TEX[FACE[i].T2].u,TEX[FACE[i].T2].v));
 			}
 			this->update();
 			printf("==============\n");

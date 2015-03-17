@@ -12,13 +12,18 @@
 #define PLATFORM_MICROSOFT (defined (_WIN32))
 // Personal Computer Preprocessor Define
 #define PLATFORM_PC !PLATFORM_IOS
+// Android?
+#define PLATFORM_ANDROID defined(__ANDROID__)
 
 #if !PLATFORM_APPLE
 typedef int GLint;
 typedef char GLchar;
 #endif
 #if PLATFORM_WINDOWS
-#define WIN32_LEAN_AND_MEAN
+#define NOMINMAX
+#include <winsock2.h> // <-------- GRRR!
+//#define WIN32_LEAN_AND_MEAN
+//#define _WINSOCK2API_
 #include <windows.h>
 #endif
 #if PLATFORM_APPLE

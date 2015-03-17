@@ -52,11 +52,11 @@ namespace ww
 			
 			unsigned int get(GLuint x, GLuint y);
 			unsigned int getRGBPixel(GLuint x, GLuint y);
-			unsigned int getBGRPixel(GLuint x, GLuint y);
-			void setBGRPixel(GLuint x, GLuint y, unsigned int color);
-			void setRGBPixel(GLuint x, GLuint y, unsigned int color);
+			unsigned int getSwappedPixel(GLuint x, GLuint y);
+			void setSwappedPixel(GLuint x, GLuint y, unsigned int color);
+			void setPixel(GLuint x, GLuint y, unsigned int color);
 			// THIS ACTS LIKE GAMEMAKER'S DRAW_RECTANGLE. X2 and Y2 AREN'T INCLUDED IN THE PIXEL SETTING!
-			void setRGBRect(GLuint x1, GLuint y1, GLuint x2, GLuint y2, unsigned int color);
+			void setRect(GLuint x1, GLuint y1, GLuint x2, GLuint y2, unsigned int color);
 			void update();
 			void update(unsigned int *source, unsigned int w, unsigned int h);
 
