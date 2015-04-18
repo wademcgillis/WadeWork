@@ -1,6 +1,7 @@
 #ifndef __WadeWork__Texture_h__
 #define __WadeWork__Texture_h__
 #include <WadeWork/opengl.h>
+#include <WadeWork/types.h>
 namespace ww
 {
 	namespace gfx
@@ -63,6 +64,8 @@ namespace ww
 			void setApparentSize(GLuint w, GLuint h);
 			
 			void bind();
+
+			ww::Rectanglef getUVRectFromIntRect(ww::Rectanglei rect);
 		};
 	} // namespace gfx
 } // namespace ww

@@ -6,12 +6,21 @@ namespace ww
 		Sprite::Sprite()
 		{
 			vertices = new ww::gfx::Vertex[6]; // enough vertices for a face
-			internalColor = 0xFFFFFFFF;
-			internalX = 0.f;
-			internalY = 0.f;
-			internalWidth = 1;
-			internalHeight = 1;
+			memset(vertices,0,sizeof(ww::gfx::Vertex)*6);
 			subimageCount = 1;
+			
+			internalColor = 0;
+			setColor(0xFFFFFFFF);
+			
+			internalX = 1.f;
+			internalY = 1.f;
+			setPosition(0.f,0.f);
+
+			internalWidth = 2;
+			internalHeight = 2;
+			setSize(1,1);
+			
+			setSubimageUVRect(0, 0, 0, 1, 1);
 		}
 
 		void Sprite::setSize(unsigned int width, unsigned int height)
@@ -101,6 +110,7 @@ namespace ww
 			if (count == 0)
 				count = 1;
 			ww::gfx::Vertex *newVertices = new ww::gfx::Vertex[count*6];
+			memset(newVertices,0,count*6*sizeof(ww::gfx::Vertex)); // UGH.
 			memcpy(newVertices,vertices,6*min(count,subimageCount)*sizeof(ww::gfx::Vertex));
 			// update the vertex count
 			subimageCount = count;

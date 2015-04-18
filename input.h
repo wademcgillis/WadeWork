@@ -23,9 +23,13 @@ namespace ww
 
 			extern void clear();
 
+			extern int wheel();
+
 			extern vec2di getPosition();
 			extern int getX();
 			extern int getY();
+
+			extern bool hits(ww::Rectanglei rect);
 
 			extern bool isButtonPressed(unsigned int button);
 			extern bool isButtonDown(unsigned int button);

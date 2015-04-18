@@ -151,6 +151,7 @@ namespace ww
 			bool mousestateDown[3];
 			bool mousestatePressed[3];
 			bool mousestateReleased[3];
+			int wheelDelta;
 			vec2di mousePosition;
 
 			void handleSfEvent(sf::Event event)
@@ -160,7 +161,7 @@ namespace ww
 					mousePosition.x = event.mouseMove.x;
 					mousePosition.y = event.mouseMove.y;
 				}
-				if (event.type == sf::Event::MouseButtonPressed)
+				else if (event.type == sf::Event::MouseButtonPressed)
 				{
 					mousePosition.x = event.mouseButton.x;
 					mousePosition.y = event.mouseButton.y;
@@ -174,11 +175,25 @@ namespace ww
 					mousestateDown[event.mouseButton.button] = false;
 					mousestateReleased[event.mouseButton.button] = true;
 				}
+				else if (event.type == sf::Event::MouseWheelMoved)
+				{
+					if (event.mouseWheel.delta < 0)
+						wheelDelta = -1;
+					if (event.mouseWheel.delta > 0)
+						wheelDelta = 1;
+				}
+
 			}
 			void endOfFrame()
 			{
 				for(int i=0;i<3;i++)
 					mousestatePressed[i] = mousestateReleased[i] = false;
+				wheel = 0;
+			}
+
+			int wheel()
+			{
+				return wheelDelta;
 			}
 
 			vec2di getPosition()
@@ -201,6 +216,28 @@ namespace ww
 					return sf::Mouse::getPosition(*ww::gfx::window).y;
 				else
 					return sf::Mouse::getPosition().y;
+			}
+			bool hits(ww::Rectanglei rect)
+			{
+				int xx = 0;
+				int yy = 0;
+				if (ww::gfx::window)
+				{
+					xx = sf::Mouse::getPosition(*ww::gfx::window).x;
+					yy = sf::Mouse::getPosition(*ww::gfx::window).y;
+				}
+				else
+				{
+					xx = sf::Mouse::getPosition().x;
+					yy = sf::Mouse::getPosition().y;
+				}
+					
+				if (xx >= rect.x)
+					if (yy >= rect.y)
+						if (xx < rect.x + rect.width)
+							if (yy < rect.y + rect.height)
+								return true;
+				return false;
 			}
 
 			void clear()

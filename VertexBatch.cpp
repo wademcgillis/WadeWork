@@ -19,18 +19,18 @@ namespace ww
 	{
 		const unsigned int DEFAULT_VERTEXBATCH_TRIANGLE_COUNT = 0x1ffff;
 
-		VertexBatch::VertexBatch(bool normals, unsigned int maxVertCount, bool autoResizeVertices)
+		VertexBatch::VertexBatch(bool normals, unsigned int maxTriCount, bool autoResizeVertices)
 		{
 			initialized = false;
 			usesNormals = normals;
-			maxTriangleCount = maxVertCount;
+			maxTriangleCount = maxTriCount;
 			autoResizeVertexArray = autoResizeVertices;
 		}
-		VertexBatch::VertexBatch(bool normals, unsigned int maxVertCount)
+		VertexBatch::VertexBatch(bool normals, unsigned int maxTriCount)
 		{
 			initialized = false;
 			usesNormals = normals;
-			maxTriangleCount = maxVertCount;
+			maxTriangleCount = maxTriCount;
 			autoResizeVertexArray = false;
 		}
 		VertexBatch::VertexBatch(bool normals)
@@ -85,7 +85,9 @@ namespace ww
 
 			if (ww::gfx::supportsOpenGL2())
 			{
-				//printf("DOING VERTEX ARRAYS AND STUFF\n");
+				printf("DOING VERTEX ARRAYS AND STUFF\n");
+				printf("this = %X\n",(unsigned int)this);
+				printf("&vertexArray = %X\n",(unsigned int)&vertexArray);
 				glGenVertexArrays(1, &vertexArray);
 				glBindVertexArray(vertexArray);
 				glGenBuffers(1, &vertexBuffer);
@@ -183,7 +185,7 @@ namespace ww
 				count = vertexCount;
 			if (count == 0)
 				return;
-			printf("Drawing %i triangles\n",vertexCount/3);
+			//printf("Drawing %i triangles\n",vertexCount/3);
 			if (ww::gfx::supportsOpenGL2())
 			{
 				if (dirty)

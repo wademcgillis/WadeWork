@@ -149,7 +149,7 @@ namespace ww
 #if PLATFORM_WINDOWS
 			if (CONFIG & ww::sys::CONFIG_OPENGL2)
 			{
-				printf("ABOUT  TO CALL!!!\n");
+				printf("Initializing GLEW...\n");
 				if (ww::gfx::supportsOpenGL2())
 					glewInit();
 			}
@@ -166,7 +166,7 @@ namespace ww
 			glEnable(GL_ALPHA_TEST);
 			glAlphaFunc(GL_GREATER,.01f);
 			//glBlendFunc(GL_SRC_ALPHA, GL_DST_ALPHA);//GL_ONE_MINUS_SRC_ALPHA);
-			glEnable(GL_CULL_FACE);
+			glDisable(GL_CULL_FACE);
 			glFrontFace(GL_CCW);
 
 			if (~CONFIG & ww::sys::CONFIG_DISABLE_OPENGL_DEPTHBUFFER)

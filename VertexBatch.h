@@ -34,8 +34,8 @@ namespace ww
 
 			bool loadOBJ(const char *fname);
 
-			VertexBatch(bool normals, unsigned int maxVertCount, bool autoResizeVertices);
-			VertexBatch(bool normals, unsigned int maxVertCount);
+			VertexBatch(bool normals, unsigned int maxTriCount, bool autoResizeVertices);
+			VertexBatch(bool normals, unsigned int maxTriCount);
 			VertexBatch(bool normals);
 			VertexBatch();
 			~VertexBatch();

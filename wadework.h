@@ -1,5 +1,6 @@
 #ifndef __WadeWork__wadework_h__
 #define __WadeWork__wadework_h__
+#include <WadeWork/sys_defines.h>
 #include <WadeWork/Buffer.h>
 
 #include <WadeWork/sys.h>

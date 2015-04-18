@@ -123,7 +123,7 @@ namespace ww
 					dataPtr[width*j + i] = source[dataWidth*j + i];
 			glGenTextures(1, &texture);
 			glBindTexture(GL_TEXTURE_2D, texture);
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, dataPtr);
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_BGRA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, dataPtr);
 			glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 			glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -188,6 +188,8 @@ namespace ww
 #endif
 				return false;
 			}
+			else
+				printf("Success loading file: %s\n",fname.c_str());
 			/*img.flipVertically();
 			const sf::Uint8 *imageData = img.getPixelsPtr();
 			width = img.getSize().x;
@@ -224,7 +226,7 @@ namespace ww
 #endif
 			glGenTextures(1, &texture);
 			glBindTexture(GL_TEXTURE_2D, texture);
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, imageData);
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, imageData);
 			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -240,7 +242,7 @@ namespace ww
 		{
 			if (dataPtr == NULL)
 				return 0x00000000;
-			return dataPtr[POS];
+			return dataPtr[x+width*y];
 		}
 			
 			
@@ -372,17 +374,22 @@ namespace ww
 			
 		void Texture::bind()
 		{
-			if (sharedBoundTexture != texture)
+			/*if (sharedBoundTexture != texture)
 			{
-				sharedBoundTexture = texture;
+				sharedBoundTexture = texture;*/
 				glBindTexture(GL_TEXTURE_2D, texture);
-			}
+			//}
 		}
 
 		void Texture::setApparentSize(GLuint w, GLuint h)
 		{
 			apparentWidth = w;
 			apparentHeight = h;
+		}
+
+		ww::Rectanglef Texture::getUVRectFromIntRect(ww::Rectanglei rect)
+		{
+			return ww::Rectanglef((float)rect.x/(float)apparentWidth,(float)rect.y/(float)apparentHeight,(float)rect.width/(float)apparentWidth,(float)rect.height/(float)apparentHeight);
 		}
 	} // namespace gfx
 } // namespace ww

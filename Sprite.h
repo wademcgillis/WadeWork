@@ -35,9 +35,9 @@ namespace ww
 			unsigned int getColor();
 			void setColor(unsigned int color);
 
-			virtual void setFlipX(bool a) {}
+			/*virtual void setFlipX(bool a) {}
 			virtual void setFlipY(bool a) {}
-			virtual void setScale(float s, float s2) {}
+			virtual void setScale(float s, float s2) {}*/
 		};
 	}
 }
