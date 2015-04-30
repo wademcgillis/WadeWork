@@ -126,12 +126,6 @@ namespace ww
 		int setup(unsigned int config)
 		{
 			CONFIG = config;
-			ww::gui::initialize();
-			if (CONFIG & ww::sys::CONFIG_OPENGL1)
-			{
-				ww::gfx::FORCE_GL1 = true;
-				printf("HO HO HO OPENGL1!!!!!!\n");
-			}
 #if PLATFORM_WINDOWS
 			timeBeginPeriod(1);
 			WSADATA wsaData;
@@ -139,7 +133,15 @@ namespace ww
 				fprintf(stderr, "WSAStartup failed.\n");
 				exit(1);
 			}
+			if (CONFIG & ww::sys::CONFIG_WINSOCK_ONLY)
+				return 0;
 #endif
+			ww::gui::initialize();
+			if (CONFIG & ww::sys::CONFIG_OPENGL1)
+			{
+				ww::gfx::FORCE_GL1 = true;
+				printf("HO HO HO OPENGL1!!!!!!\n");
+			}
 			unsigned int depthBufferBits = 0;
 			
 			depthBufferBits = 0;
@@ -166,7 +168,7 @@ namespace ww
 			glEnable(GL_ALPHA_TEST);
 			glAlphaFunc(GL_GREATER,.01f);
 			//glBlendFunc(GL_SRC_ALPHA, GL_DST_ALPHA);//GL_ONE_MINUS_SRC_ALPHA);
-			glDisable(GL_CULL_FACE);
+			glEnable(GL_CULL_FACE);
 			glFrontFace(GL_CCW);
 
 			if (~CONFIG & ww::sys::CONFIG_DISABLE_OPENGL_DEPTHBUFFER)
@@ -260,7 +262,7 @@ namespace ww
 			{
 				if (event.type == sf::Event::KeyPressed || event.type == sf::Event::KeyReleased)
 					ww::input::keyboard::handleSfEvent(event);
-				if (event.type == sf::Event::MouseButtonPressed || event.type == sf::Event::MouseButtonReleased || event.type == sf::Event::MouseMoved)
+				if (event.type == sf::Event::MouseButtonPressed || event.type == sf::Event::MouseButtonReleased || event.type == sf::Event::MouseMoved || event.type == sf::Event::MouseWheelMoved)
 					ww::input::mouse::handleSfEvent(event);
 				if (event.type == sf::Event::Closed)
 					ww::gfx::window->close();

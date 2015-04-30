@@ -21,6 +21,8 @@ namespace ww
 			setSize(1,1);
 			
 			setSubimageUVRect(0, 0, 0, 1, 1);
+
+			flippedX = false;
 		}
 
 		void Sprite::setSize(unsigned int width, unsigned int height)
@@ -60,6 +62,43 @@ namespace ww
 		void Sprite::setSubimageUVRect(unsigned int subimage, ww::Rectanglef rect)
 		{
 			setSubimageUVRect(subimage,rect.x,rect.y,rect.width,rect.height);
+		}
+		void Sprite::setFlipX(bool flip)
+		{
+			if (flippedX == flip)
+				return;
+			flippedX = flip;
+			float L, R, T, B;
+			for(int subimage=0;subimage<subimageCount;subimage++)
+			{
+				R = vertices[6*subimage+0].u;
+				//B = vertices[6*subimage+0].v;
+				L = vertices[6*subimage+2].u;
+				//T = vertices[6*subimage+2].v;
+
+				float temp;
+				temp = R;
+				R = L;
+				L = temp;
+
+				vertices[6*subimage+0].u = R;
+				//vertices[6*subimage+0].v = B;
+
+				vertices[6*subimage+1].u = R;
+				//vertices[6*subimage+1].v = T;
+
+				vertices[6*subimage+2].u = L;
+				//vertices[6*subimage+2].v = T;
+
+				vertices[6*subimage+3].u = R;
+				//vertices[6*subimage+3].v = B;
+
+				vertices[6*subimage+4].u = L;
+				//vertices[6*subimage+4].v = T;
+
+				vertices[6*subimage+5].u = L;
+				//vertices[6*subimage+5].v = B;
+			}
 		}
 		void Sprite::setSubimageUVRect(unsigned int subimage, float u, float v, float w, float h)
 		{

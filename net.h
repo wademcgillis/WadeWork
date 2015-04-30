@@ -20,8 +20,9 @@
 //#include <windows.h>
 
 #endif
-//#include <WadeWork/Tcp.h>
-//#include <WadeWork/Udp.h>
+#include <WadeWork/Tcp.h>
+#include <WadeWork/Udp.h>
+#include <WadeWork/Http.h>
 #include <vector>
 namespace ww
 {

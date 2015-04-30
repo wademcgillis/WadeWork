@@ -11,6 +11,7 @@ namespace ww
 		const unsigned int CONFIG_CUSTOM_TIMER = 0x8;
 		const unsigned int CONFIG_XINPUT = 0x10;
 		const unsigned int CONFIG_DISABLE_OPENAL = 0x20;
+		const unsigned int CONFIG_WINSOCK_ONLY = 0x40;
 
 		extern int setup(unsigned int config);
 		extern int setup_apple(unsigned int config, const char *path, int argc, char * argv[]);

@@ -127,7 +127,7 @@ namespace ww
 				printf("-----\n");
 			}
 			else
-				printf("\tsuccess\n");
+				printf("success\n");
 			perror(NULL);
 			
 			
@@ -192,7 +192,7 @@ namespace ww
 			
 			char buf[7] = "";
 			printf("RECV RIGHT AFTER CONNECTION RETURNS: %i\n",(int)recv(mysocket,(char*)&buf,5,MSG_PEEK));
-			
+			printf("buf = %s\n",buf);
 			errno = 0;
 			//fcntl(mysocket, F_SETFL, O_NONBLOCK);
 			//perror(NULL);
@@ -230,12 +230,13 @@ namespace ww
 		bool TCPSocket::send(Buffer *buffer)
 		{
 			int len = buffer->getlength();
+			printf("Attempting to send %i bytes.\n",len);
 			int l = 0;
-			if ((l = sendall(mysocket,(char*)&len,4)) != 4)
+			/*if ((l = sendall(mysocket,(char*)&len,4)) != 4)
 			{
 				printf("error occurred while sending length. Only sent %i bytes\n",l);
 				return false;
-			}
+			}*/
 			if ((l = sendall(mysocket,buffer->getbytes(),buffer->getlength())) != buffer->getlength())
 			{
 				printf("error occurred while sending data. Only sent %i bytes\n",l);
@@ -286,11 +287,11 @@ namespace ww
 			
 			int len = 0;
 			int l = 0;
-			if ((l = recvall(mysocket,(char*)&len,4)) != 4)
+			/*if ((l = recvall(mysocket,(char*)&len,4)) != 4)
 			{
 				//printf("error occurred while receiving length. Only read %i bytes\n",l);
 				return NULL;
-			}
+			}*/
 			
 			char *buff = new char[len+1];
 			if ((l = recvall(mysocket,buff,len)) != len)

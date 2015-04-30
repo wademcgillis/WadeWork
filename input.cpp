@@ -177,6 +177,7 @@ namespace ww
 				}
 				else if (event.type == sf::Event::MouseWheelMoved)
 				{
+					printf("WHOO! %i\n",event.mouseWheel.delta);
 					if (event.mouseWheel.delta < 0)
 						wheelDelta = -1;
 					if (event.mouseWheel.delta > 0)
@@ -188,7 +189,7 @@ namespace ww
 			{
 				for(int i=0;i<3;i++)
 					mousestatePressed[i] = mousestateReleased[i] = false;
-				wheel = 0;
+				wheelDelta = 0;
 			}
 
 			int wheel()
@@ -1744,6 +1745,10 @@ namespace ww
 					s.push_back(' ');
 				if (_key >= ww::input::key::Num0 && _key <= ww::input::key::Num9)
 					s.push_back('0'+(_key-ww::input::key::Num0));
+				if (_key == ww::input::key::Period)
+					s.push_back('.');
+				if (_key == ww::input::key::Minus)
+					s.push_back('-');
 				return s;
 			}
 		};

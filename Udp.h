@@ -21,6 +21,7 @@ namespace ww
 			bool open(const char *ip, unsigned short port);
 			bool send(Buffer *buffer);
 			void close();
+			//bool sendraw(Buffer *buffer);
 		};
 		
 		class UDPReceiver
@@ -37,6 +38,7 @@ namespace ww
 		public:
 			bool open(unsigned short port);
 			Buffer *receive(char *their_ip);
+			//Buffer *receiveraw(char *their_ip);
 			void close();
 		};
 	} // namespace net

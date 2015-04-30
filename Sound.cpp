@@ -130,7 +130,7 @@ namespace ww
 		void Sound::loop()
 		{
 			// set looping to true and play the sound
-			alSourcei(source, AL_LOOPING, AL_FALSE);
+			alSourcei(source, AL_LOOPING, AL_TRUE);
 			alSourcePlay(source);
 		}
 		bool Sound::isLooping()

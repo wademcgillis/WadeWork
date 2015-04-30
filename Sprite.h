@@ -14,6 +14,7 @@ namespace ww
 			unsigned int internalWidth, internalHeight;
 			float internalX, internalY;
 			unsigned int internalColor;
+			bool flippedX;
 		public:
 			Sprite();
 
@@ -34,6 +35,8 @@ namespace ww
 			
 			unsigned int getColor();
 			void setColor(unsigned int color);
+
+			void setFlipX(bool flip);
 
 			/*virtual void setFlipX(bool a) {}
 			virtual void setFlipY(bool a) {}

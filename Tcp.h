@@ -24,6 +24,8 @@ namespace ww
 			void close();
 			bool send(Buffer *buffer);
 			Buffer *receive();
+			//bool sendraw(Buffer *buffer);
+			//Buffer *receiveraw();
 			const char* getipaddress();
 		};
 		
