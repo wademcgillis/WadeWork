@@ -8,13 +8,15 @@ namespace ww
 	{
 		namespace keyboard
 		{
+			const unsigned int NONE = 0;
+			const unsigned int UPPERCASE = 1;
 			extern void clear();
 
 			extern bool isKeyPressed(unsigned int button);
 			extern bool isKeyDown(unsigned int button);
 			extern bool isKeyReleased(unsigned int button);
 
-			extern std::string getTypedText();
+			extern std::string getTypedText(unsigned int transform = NONE);
 			extern void setTypedText(std::string text);
 		}
 
@@ -192,12 +194,12 @@ namespace ww
 			const unsigned int Numpad7 = 0x67;
 			const unsigned int Numpad8 = 0x68;
 			const unsigned int Numpad9 = 0x69;
-			const unsigned int Multiply = 0x6A;
-			const unsigned int Add = 0x6B;
+			const unsigned int NumpadMultiply = 0x6A;
+			const unsigned int NumpadPlus = 0x6B;
 			const unsigned int Separator = 0x6C;
-			const unsigned int Subtract = 0x6D;
+			const unsigned int NumpadMinus = 0x6D;
 			const unsigned int Decimal = 0x6E;
-			const unsigned int Divide = 0x6F;
+			const unsigned int NumpadSlash = 0x6F;
 			const unsigned int F1 = 0x70;
 			const unsigned int F2 = 0x71;
 			const unsigned int F3 = 0x72;
@@ -237,6 +239,12 @@ namespace ww
 			const unsigned int Slash = 0xDC;
 			const unsigned int RBracket = 0xDD;
 			const unsigned int Quote = 0xDE;
+
+			// CUSTOM?
+
+			const unsigned int Equals = 0xDF;
+
+			
 		};
 	};
 };
