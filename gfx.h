@@ -52,6 +52,7 @@ namespace ww
 
 		extern bool supportsOpenGL2();
 
+		extern void setWindowTitle(std::string title);
 		extern void setWindowSize(unsigned int width, unsigned int height);
 
 		extern void setFramerate(unsigned int rate);

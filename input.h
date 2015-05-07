@@ -13,6 +13,9 @@ namespace ww
 			extern bool isKeyPressed(unsigned int button);
 			extern bool isKeyDown(unsigned int button);
 			extern bool isKeyReleased(unsigned int button);
+
+			extern std::string getTypedText();
+			extern void setTypedText(std::string text);
 		}
 
 		namespace mouse

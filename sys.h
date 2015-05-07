@@ -5,6 +5,10 @@ namespace ww
 {
 	namespace sys
 	{
+		namespace dont
+		{
+			void setKeyRepeatEnabled(bool enable);
+		}
 		const unsigned int CONFIG_OPENGL1 = 0x1;
 		const unsigned int CONFIG_OPENGL2 = 0x2;
 		const unsigned int CONFIG_DISABLE_OPENGL_DEPTHBUFFER = 0x4;

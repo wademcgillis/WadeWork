@@ -55,11 +55,11 @@ namespace ww
 						if (keyboard_stringGM.length() > 0)
 							keyboard_stringGM.erase(keyboard_stringGM.begin()+keyboard_stringGM.size()-1);
 					}
-					else if (key2string(lastKeyPressedGM) != "")
+					else if (lastCharPressedGM)
 					{
 						keyboard_stringGM += lastCharPressedGM;
 					}
-					while(keyboard_stringGM.size() > 1023)
+					while(keyboard_stringGM.size() > 1024)
 						keyboard_stringGM.erase(keyboard_stringGM.begin());
 				}
 				else if (event.type == sf::Event::KeyReleased)
@@ -110,6 +110,15 @@ namespace ww
 					}
 				}
 				keyboard_stringGM += keys;
+			}
+
+			std::string getTypedText()
+			{
+				return keyboard_stringGM;
+			}
+			void setTypedText(std::string text)
+			{
+				keyboard_stringGM = text;
 			}
 
 			void endOfFrame()

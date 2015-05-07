@@ -67,6 +67,15 @@ namespace ww
 			}
 			return GL2;
 		}
+		void setWindowTitle(std::string title)
+		{
+#if PLATFORM_IOS
+			NSLog(@"Warning: setWindowTitle is unavailable on mobile devices.");
+#else
+			if (window)
+				window->setTitle(title);
+#endif
+		}
 
 		void setWindowSize(unsigned int width, unsigned int height)
 		{
@@ -150,6 +159,7 @@ namespace ww
 			}
 			if (bm == ww::gfx::BM_INVERT)
 			{
+				glBlendFunc(GL_ONE_MINUS_DST_COLOR, GL_ONE_MINUS_SRC_COLOR);
 			}
 			if (bm == ww::gfx::BM_MULTIPLY)
 			{

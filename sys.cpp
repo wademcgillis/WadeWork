@@ -72,6 +72,13 @@ namespace ww
 
 	namespace sys
 	{
+		namespace dont
+		{
+			void setKeyRepeatEnabled(bool enable)
+			{
+				ww::gfx::window->setKeyRepeatEnabled(enable);
+			}
+		}
 		bool (*initFuncPtr)(void);
 		bool (*timerFuncPtr)(void);
 		bool (*deinitFuncPtr)(void);
