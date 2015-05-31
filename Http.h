@@ -29,6 +29,7 @@ namespace ww
 			unsigned int method;
 
 			bool finished;
+			bool sending;
 			bool async;
 			HttpResponse response;
 			unsigned int contentReceivedCount;
@@ -41,6 +42,8 @@ namespace ww
 			static const unsigned char GET = 0;
 			static const unsigned char POST = 1;
 			HttpRequest();
+			void clear();
+
 			void setHost(std::string host);
 			void setUri(std::string uri);
 			void setBody(std::string body);
@@ -57,6 +60,8 @@ namespace ww
 			HttpResponse getResponse();
 				
 			void sendRequestFunc();
+
+
 		};
 	}
 }

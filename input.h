@@ -6,25 +6,32 @@ namespace ww
 {
 	namespace input
 	{
+		std::string getName(unsigned int inputID);
+
 		namespace keyboard
 		{
 			const unsigned int NONE = 0;
 			const unsigned int UPPERCASE = 1;
 			extern void clear();
 
-			extern bool isKeyPressed(unsigned int button);
-			extern bool isKeyDown(unsigned int button);
-			extern bool isKeyReleased(unsigned int button);
+			extern bool isKeyPressed(unsigned int key);
+			extern bool isKeyDown(unsigned int key);
+			extern bool isKeyReleased(unsigned int key);
 
 			extern std::string getTypedText(unsigned int transform = NONE);
 			extern void setTypedText(std::string text);
+
+			extern std::string getName(unsigned int button);
+
+			extern unsigned int getLastKeyPressed();
+			extern void setLastKeyPressed(unsigned int key);
 		}
 
 		namespace mouse
 		{
-			const unsigned int LEFT = 0;
-			const unsigned int RIGHT = 1;
-			const unsigned int MIDDLE = 2;
+			const unsigned int LEFT = 0x800;
+			const unsigned int RIGHT = 0x801;
+			const unsigned int MIDDLE = 0x802;
 
 			extern void clear();
 
@@ -39,14 +46,16 @@ namespace ww
 			extern bool isButtonPressed(unsigned int button);
 			extern bool isButtonDown(unsigned int button);
 			extern bool isButtonReleased(unsigned int button);
+
+			extern std::string getName(unsigned int button);
 		}
 
 		namespace touch
 		{
-			const unsigned int SWIPE_RIGHT = 0;
-			const unsigned int SWIPE_UP = 1;
-			const unsigned int SWIPE_LEFT = 2;
-			const unsigned int SWIPE_DOWN = 3;
+			const unsigned int SWIPE_RIGHT = 0x1001;
+			const unsigned int SWIPE_UP = 0x1001;
+			const unsigned int SWIPE_LEFT = 0x1001;
+			const unsigned int SWIPE_DOWN = 0x1001;
 
 			extern void clearTouches();
 			extern bool swiped(int direction);
@@ -76,37 +85,41 @@ namespace ww
 
 		namespace iCade
 		{
-			const unsigned char RIGHT = 0;
-			const unsigned char UP = 1;
-			const unsigned char LEFT = 2;
-			const unsigned char DOWN = 3;
+			const unsigned char RIGHT = 0x10001;
+			const unsigned char UP = 0x10002;
+			const unsigned char LEFT = 0x10003;
+			const unsigned char DOWN = 0x10004;
 			
-			const unsigned char BUTTON1 = 4;
-			const unsigned char BUTTON2 = 5;
-			const unsigned char BUTTON3 = 6;
-			const unsigned char BUTTON4 = 7;
+			const unsigned char BUTTON1 = 0x10005;
+			const unsigned char BUTTON2 = 0x10006;
+			const unsigned char BUTTON3 = 0x10007;
+			const unsigned char BUTTON4 = 0x10008;
 			
-			const unsigned char BUTTON5 = 8;
-			const unsigned char BUTTON6 = 9;
-			const unsigned char BUTTON7 = 10;
-			const unsigned char BUTTON8 = 11;
+			const unsigned char BUTTON5 = 0x10009;
+			const unsigned char BUTTON6 = 0x1000A;
+			const unsigned char BUTTON7 = 0x1000B;
+			const unsigned char BUTTON8 = 0x1000C;
 
 			extern bool isButtonPressed(unsigned int button);
 			extern bool isButtonDown(unsigned int button);
 			extern bool isButtonReleased(unsigned int button);
+
+			extern std::string getName(unsigned char button);
 		}
 
 		namespace xbox360
 		{
-			bool isConnected(int controller);
-			vec2df getLeftThumb(int controller);
-			vec2df getRightThumb(int controller);
-			float getLeftTrigger(int controller);
-			float getRightTrigger(int controller);
+			extern bool isConnected(int controller);
+			extern vec2df getLeftThumb(int controller);
+			extern vec2df getRightThumb(int controller);
+			extern float getLeftTrigger(int controller);
+			extern float getRightTrigger(int controller);
 			
-			bool isButtonPressed(int controller, int id);
-			bool isButtonReleased(int controller, int id);
-			bool isButtonDown(int controller, int id);
+			extern bool isButtonPressed(int controller, int id);
+			extern bool isButtonReleased(int controller, int id);
+			extern bool isButtonDown(int controller, int id);
+
+			extern std::string getName(unsigned int button);
 		}
 	}
 }

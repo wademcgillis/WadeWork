@@ -18,6 +18,18 @@ namespace ww
 	}
 	namespace input
 	{
+		std::string getName(unsigned int in)
+		{
+			if (in <= 0xFF)
+				return keyboard::getName(in);
+			//else if (in >= touch::SWIPE_RIGHT && in <= touch::SWIPE_DOWN)
+			//	return touch::getName(in);
+			//else if (in >= iCade::RIGHT && in <= iCade::BUTTON8)
+			//	return iCade::getName(in);
+			//else if (in >= xbox::???? && in <= xbox::????)
+			//	return xbox::getName(in);
+		}
+
 		namespace keyboard
 		{
 			bool keystateDown[256];
@@ -34,11 +46,23 @@ namespace ww
 			unsigned int char2key(char c);
 			std::string key2string(unsigned int key);
 
+			unsigned int getLastKeyPressed()
+			{
+				return lastKeyPressed;
+			}
+
+			void setLastKeyPressed(unsigned int key)
+			{
+				lastKeyPressed = key;
+			}
+
 			void handleSfEvent(sf::Event event)
 			{
 				if (event.type == sf::Event::KeyPressed)
 				{
+					//printf("sf = %i\n",event.key.code);
 					unsigned int VK = sf2vk(event.key.code);
+					//printf("ww = %i\n",VK);
 					keystateDown[VK] = true;
 					keystatePressed[VK] = true;
 
@@ -48,6 +72,7 @@ namespace ww
 					if (VK >= ww::input::key::Num0 && VK <= ww::input::key::Num9)
 						lastCharPressed = '0'+(VK-ww::input::key::Num0);
 					lastKeyPressedGM = lastKeyPressed;
+					lastCharPressedGM = "";
 					if (key2string(lastKeyPressed) != "")
 						lastCharPressedGM = key2string(lastKeyPressed);
 					if (lastKeyPressedGM == key::Backspace)
@@ -55,9 +80,10 @@ namespace ww
 						if (keyboard_stringGM.length() > 0)
 							keyboard_stringGM.erase(keyboard_stringGM.begin()+keyboard_stringGM.size()-1);
 					}
-					else if (lastCharPressedGM)
+					else if (lastCharPressedGM != "")
 					{
 						keyboard_stringGM += lastCharPressedGM;
+						printf("typedText: %s\n",keyboard_stringGM.c_str());
 					}
 					while(keyboard_stringGM.size() > 1024)
 						keyboard_stringGM.erase(keyboard_stringGM.begin());
@@ -112,8 +138,18 @@ namespace ww
 				keyboard_stringGM += keys;
 			}
 
-			std::string getTypedText()
+			std::string getTypedText(unsigned int transform)
 			{
+				if (transform == ww::input::keyboard::UPPERCASE)
+				{
+					std::string text = keyboard_stringGM;
+					for(int i=0;i<text.length();i++)
+					{
+						if (text[i] >= 'a' && text[i] <= 'z')
+							text[i] -= ('a'-'A');
+					}
+					return text;
+				}
 				return keyboard_stringGM;
 			}
 			void setTypedText(std::string text)
@@ -136,21 +172,26 @@ namespace ww
 
 			bool isKeyPressed(unsigned int button)
 			{
-				if (button > 256)
+				if (button < 0 || button > 0xFF)
 					return false;
 				return keystatePressed[button];
 			}
 			bool isKeyDown(unsigned int button)
 			{
-				if (button > 256)
+				if (button < 0 || button > 0xFF)
 					return false;
 				return keystateDown[button];
 			}
 			bool isKeyReleased(unsigned int button)
 			{
-				if (button > 256)
+				if (button < 0 || button > 0xFF)
 					return false;
 				return keystateReleased[button];
+			}
+
+			std::string getName()
+			{
+
 			}
 		};
 
@@ -258,21 +299,21 @@ namespace ww
 
 			bool isButtonPressed(unsigned int button)
 			{
-				if (button > 2)
+				if (button < LEFT || button > MIDDLE)
 					return false;
-				return mousestatePressed[button];
+				return mousestatePressed[button-LEFT];
 			}
 			bool isButtonDown(unsigned int button)
 			{
-				if (button > 2)
+				if (button < LEFT || button > MIDDLE)
 					return false;
-				return mousestateDown[button];
+				return mousestateDown[button-LEFT];
 			}
 			bool isButtonReleased(unsigned int button)
 			{
-				if (button > 2)
+				if (button < LEFT || button > MIDDLE)
 					return false;
-				return mousestateReleased[button];
+				return mousestateReleased[button-LEFT];
 			}
 #else
 			vec2di getPosition()
@@ -1111,20 +1152,20 @@ namespace ww
 					return ww::input::key::Numpad9;
 					break;
 				case sf::Keyboard::Key::Multiply:
-					return ww::input::key::Multiply;
+					return ww::input::key::NumpadMultiply;
 					break;
 				case sf::Keyboard::Key::Add:
-					return ww::input::key::Add;
+					return ww::input::key::NumpadPlus;
 					break;
 				//return ww::input::key::Separator; 0x6C:
 				case sf::Keyboard::Key::Subtract:
-					return ww::input::key::Subtract;
+					return ww::input::key::NumpadMinus;
 					break;
 				//return ww::input::key::Decimal; 0x6E:
 				//	case sf::Keyboard::Key::Peri:
 				//	break;
 				case sf::Keyboard::Key::Divide:
-					return ww::input::key::Divide;
+					return ww::input::key::NumpadSlash;
 					break;
 				case sf::Keyboard::Key::F1:
 					return ww::input::key::F1;	
@@ -1200,6 +1241,12 @@ namespace ww
 					return ww::input::key::Comma;
 					break;
 				//return ww::input::key::Minus; 0xBD:
+				case sf::Keyboard::Key::Dash:
+					return ww::input::key::Minus;
+					break;
+				case sf::Keyboard::Key::Equal:
+					return ww::input::key::Equals;
+					break;
 				case sf::Keyboard::Key::Period:
 					return ww::input::key::Period;
 					break;
@@ -1437,20 +1484,20 @@ namespace ww
 				case ww::input::key::Numpad9:
 					return sf::Keyboard::Key::Numpad9;
 					break;
-				case ww::input::key::Multiply:
+				case ww::input::key::NumpadMultiply:
 					return sf::Keyboard::Key::Multiply;
 					break;
-				case ww::input::key::Add:
+				case ww::input::key::NumpadPlus:
 					return sf::Keyboard::Key::Add;
 					break;
 				//case ww::input::key::Separator: 0x6C;
-				case ww::input::key::Subtract:
+				case ww::input::key::NumpadMinus:
 					return sf::Keyboard::Key::Subtract;
 					break;
 				//case ww::input::key::Decimal: 0x6E;
 				//	return sf::Keyboard::Key::Peri;
 				//	break;
-				case ww::input::key::Divide:
+				case ww::input::key::NumpadSlash:
 					return sf::Keyboard::Key::Divide;
 					break;
 				case ww::input::key::F1:
@@ -1522,11 +1569,9 @@ namespace ww
 				case ww::input::key::Semicolon:
 					return sf::Keyboard::Key::SemiColon;
 					break;
-				//case ww::input::key::Plus:
 				case ww::input::key::Comma:
 					return sf::Keyboard::Key::Comma;
 					break;
-				//case ww::input::key::Minus: 0xBD;
 				case ww::input::key::Period:
 					return sf::Keyboard::Key::Period;
 					break;
@@ -1700,14 +1745,14 @@ namespace ww
 						return ww::input::key::Numpad9;
 						break;*/
 					case '*':
-						return ww::input::key::Multiply;
+						return 0;//ww::input::key::NumpadMultiply;
 						break;
 					case '+':
-						return ww::input::key::Add;
+						return ww::input::key::Plus;
 						break;
 						//return ww::input::key::Separator; 0x6C:
 					case '-':
-						return ww::input::key::Subtract;
+						return ww::input::key::Minus;
 						break;
 						//return ww::input::key::Decimal; 0x6E:
 						//	case sf::Keyboard::Key::Peri:
@@ -1748,18 +1793,326 @@ namespace ww
 			std::string key2string(unsigned int _key)
 			{
 				std::string s = "";
-				if (_key >= ww::input::key::A && _key <= ww::input::key::Z)
-					s.push_back('A'+(_key-ww::input::key::A));
 				if (_key == ww::input::key::Space)
 					s.push_back(' ');
-				if (_key >= ww::input::key::Num0 && _key <= ww::input::key::Num9)
-					s.push_back('0'+(_key-ww::input::key::Num0));
-				if (_key == ww::input::key::Period)
-					s.push_back('.');
-				if (_key == ww::input::key::Minus)
-					s.push_back('-');
+				if (ww::input::keyboard::isKeyDown(ww::input::key::LShift) || ww::input::keyboard::isKeyDown(ww::input::key::RShift))
+				{
+					if (_key >= ww::input::key::A && _key <= ww::input::key::Z)
+						s.push_back('A'+(_key-ww::input::key::A));
+					if (_key >= ww::input::key::Num0 && _key <= ww::input::key::Num9)
+					{
+						switch(_key)
+						{
+						case '1':
+							s.push_back('!');
+							break;
+						case '2':
+							s.push_back('@');
+							break;
+						case '3':
+							s.push_back('#');
+							break;
+						case '4':
+							s.push_back('$');
+							break;
+						case '5':
+							s.push_back('%');
+							break;
+						case '6':
+							s.push_back('^');
+							break;
+						case '7':
+							s.push_back('&');
+							break;
+						case '8':
+							s.push_back('*');
+							break;
+						case '9':
+							s.push_back('(');
+							break;
+						case '0':
+							s.push_back(')');
+							break;
+						}
+					}
+					if (_key == ww::input::key::Comma)
+						s.push_back('<');
+					if (_key == ww::input::key::Period)
+						s.push_back('>');
+					if (_key == ww::input::key::Slash)
+						s.push_back('?');
+					if (_key == ww::input::key::Minus)
+						s.push_back('_');
+					if (_key == ww::input::key::Equals)
+						s.push_back('+');
+				}
+				else
+				{
+					if (_key >= ww::input::key::A && _key <= ww::input::key::Z)
+						s.push_back('a'+(_key-ww::input::key::A));
+					if (_key >= ww::input::key::Num0 && _key <= ww::input::key::Num9)
+						s.push_back('0'+(_key-ww::input::key::Num0));
+					if (_key == ww::input::key::Comma)
+						s.push_back(',');
+					if (_key == ww::input::key::Period)
+						s.push_back('.');
+					if (_key == ww::input::key::Slash)
+						s.push_back('/');
+					if (_key == ww::input::key::Minus)
+						s.push_back('-');
+					if (_key == ww::input::key::Equals)
+						s.push_back('=');
+				}
 				return s;
 			}
-		};
-	};
-};
+
+			std::string getName(unsigned int key)
+			{
+				switch(key)
+				{
+				case ww::input::key::Backspace:
+					return "Backspace";
+				case ww::input::key::Tab:
+					return "Tab";
+				case ww::input::key::Return:
+					return "Return";
+				case ww::input::key::Shift:
+					return "Shift";
+				case ww::input::key::Control:
+					return "Ctrl";
+				case ww::input::key::Alt:
+					return "Alt";
+				case ww::input::key::Pause:
+					return "Pause";
+				case ww::input::key::Capslock:
+					return "Capslock";
+				case ww::input::key::Escape:
+					return "Escape";
+				case ww::input::key::Space:
+					return "Space";
+				case ww::input::key::PageUp:
+					return "PgUp";
+				case ww::input::key::PageDown:
+					return "PgDown";
+				case ww::input::key::End:
+					return "End";
+				case ww::input::key::Home:
+					return "Home";
+				case ww::input::key::Left:
+					return "Left";
+				case ww::input::key::Up:
+					return "Up";
+				case ww::input::key::Right:
+					return "Right";
+				case ww::input::key::Down:
+					return "Down";
+				//case ww::input::key::Select:
+				//case ww::input::key::Print:
+				//case ww::input::key::Execute:
+				//case ww::input::key::Snapshot:
+				case ww::input::key::Insert:
+					return "Insert";
+				case ww::input::key::Delete:
+					return "Delete";
+				//case ww::input::key::Help:
+				case ww::input::key::Num0:
+					return "0";
+				case ww::input::key::Num1:
+					return "1";
+				case ww::input::key::Num2:
+					return "2";
+				case ww::input::key::Num3:
+					return "3";
+				case ww::input::key::Num4:
+					return "4";
+				case ww::input::key::Num5:
+					return "5";
+				case ww::input::key::Num6:
+					return "6";
+				case ww::input::key::Num7:
+					return "7";
+				case ww::input::key::Num8:
+					return "8";
+				case ww::input::key::Num9:
+					return "9";
+				case ww::input::key::A:
+					return "A";
+				case ww::input::key::B:
+					return "B";
+				case ww::input::key::C:
+					return "C";
+				case ww::input::key::D:
+					return "D";
+				case ww::input::key::E:
+					return "E";
+				case ww::input::key::F:
+					return "F";
+				case ww::input::key::G:
+					return "G";
+				case ww::input::key::H:
+					return "H";
+				case ww::input::key::I:
+					return "I";
+				case ww::input::key::J:
+					return "J";
+				case ww::input::key::K:
+					return "K";
+				case ww::input::key::L:
+					return "L";
+				case ww::input::key::M:
+					return "M";
+				case ww::input::key::N:
+					return "N";
+				case ww::input::key::O:
+					return "O";
+				case ww::input::key::P:
+					return "P";
+				case ww::input::key::Q:
+					return "Q";
+				case ww::input::key::R:
+					return "R";
+				case ww::input::key::S:
+					return "S";
+				case ww::input::key::T:
+					return "T";
+				case ww::input::key::U:
+					return "U";
+				case ww::input::key::V:
+					return "V";
+				case ww::input::key::W:
+					return "W";
+				case ww::input::key::X:
+					return "X";
+				case ww::input::key::Y:
+					return "Y";
+				case ww::input::key::Z:
+					return "Z";
+				case ww::input::key::LWindows:
+					return "LWin";
+				case ww::input::key::RWindows:
+					return "RWin";
+				case ww::input::key::Applications:
+					return "????";
+				case ww::input::key::Sleep:
+					return "Sleep";
+				case ww::input::key::Numpad0:
+					return "Num 0";
+				case ww::input::key::Numpad1:
+					return "Num 1";
+				case ww::input::key::Numpad2:
+					return "Num 2";
+				case ww::input::key::Numpad3:
+					return "Num 3";
+				case ww::input::key::Numpad4:
+					return "Num 4";
+				case ww::input::key::Numpad5:
+					return "Num 5";
+				case ww::input::key::Numpad6:
+					return "Num 6";
+				case ww::input::key::Numpad7:
+					return "Num 7";
+				case ww::input::key::Numpad8:
+					return "Num 8";
+				case ww::input::key::Numpad9:
+					return "Num 9";
+				case ww::input::key::NumpadMultiply:
+					return "Num *";
+				case ww::input::key::NumpadPlus:
+					return "Num +";
+				case ww::input::key::Separator:
+					return "????";
+				case ww::input::key::NumpadMinus:
+					return "Num -";
+				case ww::input::key::Decimal:
+					return "Num .";
+				case ww::input::key::NumpadSlash:
+					return "Num /";
+				case ww::input::key::F1:
+					return "F1";
+				case ww::input::key::F2:
+					return "F2";
+				case ww::input::key::F3:
+					return "F3";
+				case ww::input::key::F4:
+					return "F4";
+				case ww::input::key::F5:
+					return "F5";
+				case ww::input::key::F6:
+					return "F6";
+				case ww::input::key::F7:
+					return "7";
+				case ww::input::key::F8:
+					return "F8";
+				case ww::input::key::F9:
+					return "F9";
+				case ww::input::key::F10:
+					return "F9";
+				case ww::input::key::F11:
+					return "F11";
+				case ww::input::key::F12:
+					return "F12";
+				case ww::input::key::F13:
+					return "F13";
+				case ww::input::key::F14:
+					return "F14";
+				case ww::input::key::F15:
+					return "F15";
+				case ww::input::key::F16:
+					return "F16";
+				case ww::input::key::F17:
+					return "F17";
+				case ww::input::key::F18:
+					return "F18";
+				case ww::input::key::F19:
+					return "F19";
+				case ww::input::key::F20:
+					return "F20";
+				case ww::input::key::F21:
+					return "F21";
+				case ww::input::key::F22:
+					return "F22";
+				case ww::input::key::F23:
+					return "F23";
+				case ww::input::key::F24:
+					return "F24";
+				case ww::input::key::LShift:
+					return "LShift";
+				case ww::input::key::RShift:
+					return "RShift";
+				case ww::input::key::LControl:
+					return "LCtrl";
+				case ww::input::key::RControl:
+					return "RCtrl";
+				case ww::input::key::Semicolon:
+					return ";";
+				case ww::input::key::Plus:
+					return "+";
+				case ww::input::key::Comma:
+					return ",";
+				case ww::input::key::Minus:
+					return "-";
+				case ww::input::key::Period:
+					return ".";
+				case ww::input::key::Backslash:
+					return "/";
+				case ww::input::key::Tilde:
+					return "~";
+				case ww::input::key::LBracket:
+					return "[";
+				case ww::input::key::Slash:
+					return "\\";
+				case ww::input::key::RBracket:
+					return "]";
+				case ww::input::key::Quote:
+					return "\"";
+			// CUSTOM?
+				case ww::input::key::Equals:
+					return "=";
+
+				default:
+					return "Unknown";
+				}
+			}
+		}; // keyboard
+	}; // input
+}; // ww

@@ -19,7 +19,31 @@ namespace ww
 		
 			response.body = "";
 			response.status = 0;		
-			finished = true;
+			finished = false;
+			sending = false;
+			async = false;
+
+			contentReceivedCount = 0;
+			contentLength = 0;
+
+			threadPtr = NULL;
+		}
+
+		void HttpRequest::clear()
+		{
+			acceptedSocketSize = 0;
+			mysocket = 0;
+			host = "";
+			uri = "";
+			body = NULL;
+			bodyLength = 0;
+			method = -1;
+			contentType = "";
+		
+			response.body = "";
+			response.status = 0;		
+			finished = false;
+			sending = false;
 			async = false;
 
 			contentReceivedCount = 0;
@@ -180,6 +204,7 @@ namespace ww
 		}
 		void HttpRequest::sendRequestFunc()
 		{
+			printf("STARTING\n.\n.\n.\n.\n.\n.\n.\n.\nREQUEST\n");
 			response.body = "";
 			response.status = 0;
 			contentReceivedCount = 0;
@@ -329,6 +354,7 @@ namespace ww
 			} // if (found)
 			closesocket(mysocket);
 			finished = true;
+			sending = false;
 		}
 
 		bool HttpRequest::getFinished()
@@ -358,9 +384,10 @@ namespace ww
 
 		void HttpRequest::sendRequest(unsigned int timeoutish)
 		{
-			if (!finished)
+			if (sending)
 				return;
-			else if (threadPtr)
+			sending = true;
+			if (threadPtr)
 			{
 				((sf::Thread*)threadPtr)->terminate();
 				delete threadPtr;

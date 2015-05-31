@@ -12,7 +12,7 @@ namespace ww
 			return stbi_load(path,width,height,NULL,false);
 		}
 
-		char *file_alloc_contents(char *path)
+		char *file_alloc_contents(char *path, unsigned int *length)
 		{
 			// get contents of file
 			FILE *f = fopen(path,"rb");
@@ -20,11 +20,13 @@ namespace ww
 			{
 				// if file loaded
 				char *contents = NULL;
-				int len;
+				unsigned int len;
 				// seek to end
 				fseek(f,0,SEEK_END);
 				// get length
 				len = ftell(f);
+				if (length)
+					*length = len;
 				// seek to beginning
 				fseek(f,0,SEEK_SET);
 				// new char array
