@@ -1,7 +1,14 @@
 #ifndef __WadeWork__gui_h__
 #define __WadeWork__gui_h__
 #include <WadeWork/sys_defines.h>
+#if PLATFORM_WINDOWS
 #include <windows.h>
+#else
+typedef unsigned int HWND;
+typedef unsigned int HMENU;
+typedef unsigned int HBITMAP;
+typedef unsigned int HDC;
+#endif
 
 namespace ww
 {

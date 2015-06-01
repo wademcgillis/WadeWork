@@ -9,13 +9,19 @@
 #include <xinput.h>
 #endif
 #endif
+#if PLATFORM_IOS
+#include "AstronotAppDelegate.h"
+#include <vector>
+#endif
 
 namespace ww
 {
+#if PLATFORM_PC
 	namespace gfx
 	{
 		extern sf::Window *window;
 	}
+#endif
 	namespace input
 	{
 		std::string getName(unsigned int in)
@@ -32,6 +38,7 @@ namespace ww
 
 		namespace keyboard
 		{
+#if PLATFORM_PC
 			bool keystateDown[256];
 			bool keystatePressed[256];
 			bool keystateReleased[256];
@@ -193,6 +200,7 @@ namespace ww
 			{
 
 			}
+#endif
 		};
 
 		namespace mouse
@@ -347,7 +355,7 @@ namespace ww
 			}
 #endif
 		};
-
+		
 		namespace touch
 		{
 #if PLATFORM_IOS
@@ -367,14 +375,14 @@ namespace ww
 
 			void update()
 			{
-				swipe[SWIPE_LEFT] = newSwipe[SWIPE_LEFT];
-				swipe[SWIPE_UP] = newSwipe[SWIPE_UP];
-				swipe[SWIPE_RIGHT] = newSwipe[SWIPE_RIGHT];
-				swipe[SWIPE_DOWN] = newSwipe[SWIPE_DOWN];
-				newSwipe[SWIPE_LEFT] = false;
-				newSwipe[SWIPE_UP] = false;
-				newSwipe[SWIPE_RIGHT] = false;
-				newSwipe[SWIPE_DOWN] = false;
+				swipe[SWIPE_LEFT-SWIPE_RIGHT] = newSwipe[SWIPE_LEFT-SWIPE_RIGHT];
+				swipe[SWIPE_UP-SWIPE_RIGHT] = newSwipe[SWIPE_UP-SWIPE_RIGHT];
+				swipe[SWIPE_RIGHT-SWIPE_RIGHT] = newSwipe[SWIPE_RIGHT-SWIPE_RIGHT];
+				swipe[SWIPE_DOWN-SWIPE_RIGHT] = newSwipe[SWIPE_DOWN-SWIPE_RIGHT];
+				newSwipe[SWIPE_LEFT-SWIPE_RIGHT] = false;
+				newSwipe[SWIPE_UP-SWIPE_RIGHT] = false;
+				newSwipe[SWIPE_RIGHT-SWIPE_RIGHT] = false;
+				newSwipe[SWIPE_DOWN-SWIPE_RIGHT] = false;
 			}
 			void endOfFrame()
 			{
@@ -382,9 +390,9 @@ namespace ww
 				hasDoubleTap = false;
 			}
 			
-			TouchInput_iOS(InputManager *man)
+			TouchInput_iOS()
 			{
-				manager = man;
+				//manager = man;
 				/*if (ipad)
 					maxcount = 10;
 				 else

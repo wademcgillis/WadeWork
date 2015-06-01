@@ -15,6 +15,8 @@
 // Android?
 #define PLATFORM_ANDROID defined(__ANDROID__)
 
+#define PLATFORM_MOBILE (defined(PLATFORM_IOS) || defined(PLATFORM_ANDROID))
+
 #if !PLATFORM_APPLE
 typedef int GLint;
 typedef char GLchar;

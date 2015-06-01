@@ -53,9 +53,9 @@ namespace ww
 		namespace touch
 		{
 			const unsigned int SWIPE_RIGHT = 0x1001;
-			const unsigned int SWIPE_UP = 0x1001;
-			const unsigned int SWIPE_LEFT = 0x1001;
-			const unsigned int SWIPE_DOWN = 0x1001;
+			const unsigned int SWIPE_UP = 0x1002;
+			const unsigned int SWIPE_LEFT = 0x1003;
+			const unsigned int SWIPE_DOWN = 0x1004;
 
 			extern void clearTouches();
 			extern bool swiped(int direction);
@@ -124,7 +124,9 @@ namespace ww
 	}
 }
 
+#if PLATFORM_PC
 #include <SFML/Window/Keyboard.hpp>
+#endif
 namespace ww
 {
 	namespace input

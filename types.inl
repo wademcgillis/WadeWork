@@ -38,6 +38,18 @@ namespace ww
 	{
 
 	}
+	// VEC 5D
+	template <typename T>
+	inline vec5d<T>::vec5d() : x(0), y(0), z(0), w(0)
+	{
+		
+	}
+	
+	template <typename T>
+	inline vec5d<T>::vec5d(T X, T Y, T Z, T W, T V) : x(X), y(Y), z(Z), w(W), v(V)
+	{
+		
+	}
 	// RECT
 	template <typename T>
 	inline Rectangle<T>::Rectangle() : x(0), y(0), width(0), height(0), xoffset(0), yoffset(0)

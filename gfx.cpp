@@ -1,12 +1,16 @@
 #include <WadeWork/gfx.h>
 #include <WadeWork/sys_defines.h>
+#if PLATFORM_PC
 #include <SFML/Window.hpp>
+#endif
 
 namespace ww
 {
 	namespace gfx
 	{
+#if PLATFORM_PC
 		sf::Window *window = NULL;
+#endif
 		unsigned int window_width = 640;
 		unsigned int window_height = 480;
 
@@ -117,7 +121,9 @@ namespace ww
 
 		void display()
 		{
+#if PLATFORM_PC
 			window->display();
+#endif
 		}
 
 		void resetRenderTarget()

@@ -3,8 +3,8 @@
 #include <WadeWork/opengl.h>
 #include <WadeWork/Sprite.h>
 
-#define min(a,b) ((a) < (b)?(a):(b))
-#define max(a,b) ((a) > (b)?(a):(b))
+//#define min(a,b) ((a) < (b)?(a):(b))
+//#define max(a,b) ((a) > (b)?(a):(b))
 
 namespace ww
 {

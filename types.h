@@ -49,6 +49,22 @@ namespace ww
 	typedef vec4d<int> vec4di;
 	typedef vec4d<float> vec4df;
 
+	template <typename T>
+	class vec5d
+	{
+	public:
+		T x;
+		T y;
+		T z;
+		T w;
+		T v;
+		
+		vec5d();
+		
+		vec5d(T x, T y, T z, T w, T v);
+	};
+	typedef vec5d<int> vec5di;
+	typedef vec5d<float> vec5df;
 
 	template <typename T>
 	class Rectangle
